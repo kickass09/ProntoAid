@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">ProntoAid</string>
+    <string name="login">Login</string>
+    <string name="username">Email</string>
+    <string name="Login">login</string>
+    <string name="CreateAnAccount">Create an accout/SignIn</string>
+    <string name="SignUp">SignUp</string>
+    <string name="FirstName">Name</string>
+    <string name="LastName">LastName</string>
+    <string name="Email">Email</string>
+    <string name="Address">Address</string>
+    <string name="PhoneNumber">PhoneNumber</string>
+    <string name="UserName">UserName</string>
+    <string name="PassWord">Password</string>
+    <string name="CPassWord">Confirm Password</string>
+    <string name="Create">Create</string>
+    <string name="minimum_password">minimum_password</string>
+    <string name="auth_failed">auth_failed</string>
+    <string name="Welcome">Welcome</string>
+    <string name="Search">Search</string>
+    <string name="Searchh">Search For A Service</string>
+    <string name="SELECTDATE">SELECT DATE</string>
+    <string name="SELECTTIME">SELECT TIME</string>
+</resources>
