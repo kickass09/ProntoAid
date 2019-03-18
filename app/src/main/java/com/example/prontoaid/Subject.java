@@ -10,7 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.ArrayList;
@@ -22,6 +24,47 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     Button btnDatePicker, btnTimePicker;
     EditText txtDate, txtTime;
     private int mYear, mMonth, mDay, mHour, mMinute;
+
+//    Button radioButton = findViewById(R.id.radioButton);
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radioButton:
+                Button btn_date = (Button) this.findViewById(R.id.btn_date);
+                Button btn_time = (Button) this.findViewById(R.id.btn_time);
+                TextView in_date = (TextView) this.findViewById(R.id.in_date);
+                TextView in_time = (TextView) this.findViewById(R.id.in_time);
+                if (checked)
+                {
+
+                    btn_date.setVisibility(View.GONE);
+
+                    btn_time.setVisibility(View.GONE);
+
+                    in_date.setVisibility(View.GONE);
+
+                    in_time.setVisibility(View.GONE);
+                    break;
+                }
+            case R.id.radioButton2:
+
+                if (checked) {
+                    Button btn_date1 = (Button) this.findViewById(R.id.btn_date);
+                    btn_date1.setVisibility(View.VISIBLE);
+                    Button btn_time1 = (Button) this.findViewById(R.id.btn_time);
+                    btn_time1.setVisibility(View.VISIBLE);
+                    TextView in_date1 = (TextView) this.findViewById(R.id.in_date);
+                    in_date1.setVisibility(View.VISIBLE);
+                    TextView in_time1 = (TextView) this.findViewById(R.id.in_time);
+                    in_time1.setVisibility(View.VISIBLE);
+                   break;}
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +88,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         btnTimePicker.setOnClickListener(this);
 
     }
+
     @Override
     public void onClick(View v) {
 
@@ -70,6 +114,9 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+            long now = System.currentTimeMillis() - 1000;
+            datePickerDialog.getDatePicker().setMinDate(now);
+            datePickerDialog.getDatePicker().setMaxDate(now+(1000*60*60*24*3));
 
             datePickerDialog.show();
         }

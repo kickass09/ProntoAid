@@ -33,13 +33,14 @@
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="0dp"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="33dp"
+        android:layout_marginRight="33dp"
         android:layout_marginBottom="107dp"
         android:text="@string/Search"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/spinner"
-        app:layout_constraintStart_toStartOf="@+id/in_date"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_time" />
 
     <TextView
@@ -48,13 +49,14 @@
         android:layout_height="0dp"
         android:layout_marginStart="22dp"
         android:layout_marginLeft="22dp"
-        android:layout_marginBottom="26dp"
+        android:layout_marginBottom="252dp"
         android:text="@string/Searchh"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintBottom_toTopOf="@+id/btn_date"
         app:layout_constraintEnd_toStartOf="@+id/spinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
 
     <EditText
         android:id="@+id/in_date"
@@ -63,13 +65,10 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="68dp"
-        android:layout_marginLeft="68dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_date"
-        app:layout_constraintEnd_toStartOf="@+id/btn_date"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:visibility="invisible"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btn_date"
+        app:layout_constraintEnd_toStartOf="@+id/btn_time"
+        app:layout_constraintStart_toStartOf="@+id/in_time" />
 
     <Button
         android:id="@+id/btn_date"
@@ -84,10 +83,10 @@
         android:layout_toEndOf="@+id/in_date"
         android:layout_toRightOf="@+id/in_date"
         android:text="@string/SELECTDATE"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/btn_time"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/in_date"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
         android:id="@+id/in_time"
@@ -98,6 +97,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginStart="85dp"
         android:layout_marginLeft="85dp"
+        android:visibility="invisible"
         app:layout_constraintBaseline_toBaselineOf="@+id/btn_time"
         app:layout_constraintEnd_toStartOf="@+id/btn_time"
         app:layout_constraintStart_toStartOf="parent" />
@@ -114,6 +114,7 @@
         android:layout_marginBottom="38dp"
         android:onClick="onDateSet"
         android:text="@string/SELECTTIME"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/in_time"
@@ -121,14 +122,32 @@
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="95dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="37dp"
-        android:layout_marginRight="37dp"
-        android:layout_marginBottom="189dp"
+        android:layout_width="335dp"
+        android:layout_height="96dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginBottom="118dp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/btn_date"
-        app:layout_constraintEnd_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="1.0">
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ASAP"
+            android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/SCHEDULE" />
+    </RadioGroup>
 
 </android.support.constraint.ConstraintLayout>
