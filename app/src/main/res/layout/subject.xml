@@ -35,12 +35,16 @@
         android:id="@+id/button4"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="33dp"
-        android:layout_marginRight="33dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="107dp"
+        android:background="@drawable/button_round"
         android:text="@string/Search"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_time" />
 
     <TextView
@@ -84,6 +88,7 @@
         android:layout_toRightOf="@+id/in_date"
         android:text="@string/SELECTDATE"
         android:visibility="invisible"
+        android:background="@drawable/button_round"
         app:layout_constraintBottom_toTopOf="@+id/btn_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -113,6 +118,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="38dp"
         android:onClick="onDateSet"
+        android:background="@drawable/button_round"
         android:text="@string/SELECTTIME"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/button4"

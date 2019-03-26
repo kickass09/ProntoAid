@@ -21,7 +21,9 @@
     <string name="Searchh">Search For A Service</string>
     <string name="SELECTDATE">SELECT DATE</string>
     <string name="SELECTTIME">SELECT TIME</string>
-    <string name="ASAP">ASAP</string>
-    <string name="SCHEDULE">schedule</string>
+    <string name="ASAP">Hire Now</string>
+    <string name="SCHEDULE">schedule for Later</string>
+    <string name="forgot_password">forgot password?</string>
+    <string name="reset_password">reset password</string>
 
 </resources>
