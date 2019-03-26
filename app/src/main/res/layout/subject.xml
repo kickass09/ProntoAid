@@ -88,7 +88,7 @@
         android:layout_toRightOf="@+id/in_date"
         android:text="@string/SELECTDATE"
         android:visibility="invisible"
-        android:background="@drawable/button_round"
+
         app:layout_constraintBottom_toTopOf="@+id/btn_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -118,7 +118,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="38dp"
         android:onClick="onDateSet"
-        android:background="@drawable/button_round"
+
         android:text="@string/SELECTTIME"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/button4"

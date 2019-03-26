@@ -3,7 +3,7 @@
     <string name="login">Login</string>
     <string name="username">Email</string>
     <string name="Login">login</string>
-    <string name="CreateAnAccount">Create an accout/SignIn</string>
+    <string name="CreateAnAccount">Create an accout/SignUp</string>
     <string name="SignUp">SignUp</string>
     <string name="FirstName">Name</string>
     <string name="LastName">LastName</string>

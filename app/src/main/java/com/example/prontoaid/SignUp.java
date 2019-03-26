@@ -1,5 +1,6 @@
 package com.example.prontoaid;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +23,7 @@ public class SignUp extends AppCompatActivity {
     Button r;
     FirebaseAuth auth;
     SharedPreferences sharedpreferences;
+    ProgressDialog progressDialog;
 
     EditText iemail,ipassword,iphno,icpassword,iname;
     public static final String mypreference = "mypref";
@@ -40,6 +42,7 @@ public class SignUp extends AppCompatActivity {
         iphno = (EditText)findViewById(R.id.editText8);
         icpassword = (EditText)findViewById(R.id.editText11) ;
         iname = (EditText)findViewById(R.id.editText3);
+
         /*Spinner spinner = (Spinner) findViewById(R.id.std);
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
@@ -53,6 +56,8 @@ public class SignUp extends AppCompatActivity {
     }
     public void addListenerOnButton() {
         final Context context= this;
+        progressDialog = new ProgressDialog(this);
+
         r= (Button) findViewById(R.id.button3);
         //l= (Button) findViewById(R.id.r2lbtn);
           /* r.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +111,8 @@ public class SignUp extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "passwords do not match!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                progressDialog.setMessage("Registering User Statement..");
+                progressDialog.show();
                 auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(SignUp.this, new OnCompleteListener<AuthResult>() {
 
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -119,6 +126,7 @@ public class SignUp extends AppCompatActivity {
                         }
                     }
                 });
+                progressDialog.dismiss();
 
 
 

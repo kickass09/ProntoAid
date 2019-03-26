@@ -1,5 +1,6 @@
 package com.example.prontoaid;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ public class login extends AppCompatActivity {
     EditText iemail,ipassword;
     FirebaseAuth Auth;
     private TextView ForgotPassword;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -41,6 +43,7 @@ public class login extends AppCompatActivity {
     }
     public void addListenerOnButton() {
         final Context context= this;
+        progressDialog = new ProgressDialog(this);
         r= (Button) findViewById(R.id.button);
         l= (Button) findViewById(R.id.button2);
         l.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +67,8 @@ public class login extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                progressDialog.setMessage("Loading");
+                progressDialog.show();
                 Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(login.this, new OnCompleteListener<AuthResult>(){
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful())
@@ -83,8 +88,10 @@ public class login extends AppCompatActivity {
                     };
 
                 });
+
             }
         });
+        progressDialog.dismiss();
         ForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
