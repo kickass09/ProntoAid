@@ -34,10 +34,8 @@ public class login extends AppCompatActivity {
     EditText iemail,ipassword;
     FirebaseAuth Auth;
     private TextView ForgotPassword;
-    String uname;
     int flag=0,number;
     ProgressDialog progressDialog;
-    List<String> ulist = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,13 +110,16 @@ public class login extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             flag = 1;
                                             progressDialog.dismiss();
+                                            //Disconnection
+                                            //myRef.child(n+"").child("Available").setValue("Online");
+                                            //myRef.child(n+"").child("Available").onDisconnect().setValue("Disconnected");
                                             Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
+
+
                                             Intent intent = new Intent(login.this, Subject.class);
                                             startActivity(intent);
                                             finish();
-
                                             }
-
                                         }
                                     if (n==number)
                                         break;
@@ -145,6 +146,7 @@ public class login extends AppCompatActivity {
         ForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 startActivity(new Intent(login.this, PasswordActivity.class));
             }
         });
