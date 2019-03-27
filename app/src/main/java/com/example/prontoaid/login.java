@@ -31,7 +31,7 @@ public class login extends AppCompatActivity {
     FirebaseAuth Auth;
     private TextView ForgotPassword;
     String uname;
-    int flag=0;
+
     ProgressDialog progressDialog;
 
 
@@ -77,7 +77,7 @@ public class login extends AppCompatActivity {
                 progressDialog.setMessage("Loading");
                 progressDialog.show();
                 Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(login.this, new OnCompleteListener<AuthResult>(){
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    public void onComplete(@NonNull final Task<AuthResult> task) {
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         final DatabaseReference myRef = database.getReference("Customer");
 
@@ -96,7 +96,23 @@ public class login extends AppCompatActivity {
                                             //Log.i("Test3",email);
                                             if (uname.equals(email)){
                                                 //Log.i("Test4",flag+"");
-                                                flag=1;}
+                                                if (task.isSuccessful())
+                                                {
+                                                    Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(login.this, Subject.class);
+                                                    startActivity(intent);
+                                                    finish();
+
+                                                }
+                                                else {
+                                                    progressDialog.dismiss();
+                                                    if (password.length() < 6) {
+                                                        ipassword.setError(getString(R.string.minimum_password));
+                                                    } else {
+                                                        Toast.makeText(login.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                                }
 
 
                                             //Log.i("Message",name);
@@ -113,23 +129,7 @@ public class login extends AppCompatActivity {
                             }
                         });
 
-                        if (task.isSuccessful() && flag==1)
-                        {
-                            flag=0;
-                            Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(login.this, Subject.class);
-                            startActivity(intent);
-                            finish();
 
-                        }
-                        else {
-                            progressDialog.dismiss();
-                            if (password.length() < 6) {
-                                ipassword.setError(getString(R.string.minimum_password));
-                            } else {
-                                Toast.makeText(login.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
-                            }
-                        }
                     }
 
                 });
