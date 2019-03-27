@@ -99,12 +99,14 @@ public class login extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 //Log.i("Test2",email);
-                                number=Integer.parseInt(dataSnapshot.child("number_customer").getValue().toString());
+                                number=(int)dataSnapshot.getChildrenCount();
+                                //Log.i("Number of Children",number+"");
+                                //number=Integer.parseInt(dataSnapshot.child("number_customer").getValue().toString());
                                 int n=1;
                                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
 
                                     String uname = postSnapshot.child("Username").getValue(String.class);
-                                    Log.i("uname",uname);
+                                    //Log.i("uname",uname);
                                     if (uname.equals(email)) {
                                         //Log.i("Test4",flag+"");
                                         if (task.isSuccessful()) {
@@ -113,7 +115,7 @@ public class login extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(login.this, Subject.class);
                                             startActivity(intent);
-//                                            finish();
+                                            finish();
 
                                             }
 

@@ -129,17 +129,15 @@ public class SignUp extends AppCompatActivity {
                         } else {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             final DatabaseReference myRef = database.getReference("Customer");
-                            myRef.child("number_customer").addListenerForSingleValueEvent(new ValueEventListener() {
+                            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    int number1 = Integer.parseInt(dataSnapshot.getValue().toString());
-                                    number1+=1;
+                                    int number1 = (int)dataSnapshot.getChildrenCount();
+                                    number1++;
                                     //myRef=myRef.getParent();
                                     myRef.child(number1+"").child("Name").setValue(name);
                                     myRef.child(number1+"").child("Phone_Number").setValue(number);
                                     myRef.child(number1+"").child("Username").setValue(email);
-
-                                    myRef.child("number_customer").setValue(number1+"");
                                 }
 
                                 @Override
@@ -155,18 +153,10 @@ public class SignUp extends AppCompatActivity {
                 //progressDialog.dismiss();
 
 
-
-
             }
         });
         progressDialog.dismiss();
-        /*r.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= new Intent(context, login.class);
-                startActivity(intent);
-            }
-        });*/
+
     }
 
 }
