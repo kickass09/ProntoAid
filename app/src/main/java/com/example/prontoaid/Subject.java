@@ -76,9 +76,10 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         //spinner.setOnItemSelectedListener(this);
         List<String> categories = new ArrayList<String>();
         categories.add("Plumber");
-        categories.add("electrician");
+        categories.add("Electrician");
         categories.add("House Cleaner");
-        categories.add("Call girl");
+        categories.add("Carpenter");
+        //categories.add("Call Girl");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         spinner.setAdapter(dataAdapter);
         Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
