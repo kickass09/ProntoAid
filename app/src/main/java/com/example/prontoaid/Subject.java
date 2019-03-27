@@ -3,6 +3,7 @@ package com.example.prontoaid;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -154,6 +155,15 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
 
             timePickerDialog.show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        finish();
+        Intent intent = new Intent(Subject.this, login.class);
+        startActivity(intent);
     }
 }
 

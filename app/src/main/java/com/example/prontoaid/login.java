@@ -113,6 +113,7 @@ public class login extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(login.this, Subject.class);
                                             startActivity(intent);
+//                                            finish();
 
                                             }
 
@@ -150,8 +151,3 @@ public class login extends AppCompatActivity {
     }}
 
 
-/*Connected disconnected
-DatabaseReference presenceRef = FirebaseDatabase.getInstance().getReference("disconnectmessage");
-// Write a string when this client loses connection
-presenceRef.onDisconnect().setValue("I disconnected!");
- */
