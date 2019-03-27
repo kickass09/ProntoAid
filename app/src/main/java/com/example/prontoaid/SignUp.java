@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignUp extends AppCompatActivity {
     Button r;
@@ -121,18 +127,44 @@ public class SignUp extends AppCompatActivity {
                             Toast.makeText(SignUp.this, "Authentication failed." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
+                            /*FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+                            DatabaseReference myRef = database.getReference();
+                            myRef=myRef.child("Customer");
+                            myRef.child("2").child("Name").setValue(iname);
+
+                            myRef.child("number_customer").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    int number = Integer.parseInt(dataSnapshot.getValue().toString());
+                                    number+=1;
+
+                                    myRef.child(number+"").child("Name").setValue(iname);
+                                    myRef.child(number+"").child("Username").setValue(iemail);
+                                    myRef.child(number+"").child("Password").setValue(ipassword);
+                                    myRef.child(number+"").child("Phone_Number").setValue(iphno.toString());
+
+                                    myRef.child("number_customers").setValue(number+"");
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });*/
+
                             startActivity(new Intent(SignUp.this, login.class));
                             finish();
                         }
                     }
                 });
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
 
 
 
 
             }
         });
+        progressDialog.dismiss();
         /*r.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -66,12 +66,14 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subject);
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
-      //  spinner.setOnItemSelectedListener(this);
+        //spinner.setOnItemSelectedListener(this);
         List<String> categories = new ArrayList<String>();
         categories.add("Plumber");
         categories.add("electrician");
@@ -79,6 +81,15 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         categories.add("Call girl");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         spinner.setAdapter(dataAdapter);
+        Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
+        //spinner.setOnItemSelectedListener(this);
+        List<String> categories2 = new ArrayList<String>();
+        categories2.add("Kakkanad");
+        categories2.add("Vytila");
+        categories2.add("Thripunithura");
+        categories2.add("Palarivattom");
+        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories2);
+        spinner2.setAdapter(dataAdapter2);
         //final RelativeLayout rl = (RelativeLayout) findViewById(R.id.rl);
         btnDatePicker=(Button)findViewById(R.id.btn_date);
         btnTimePicker=(Button)findViewById(R.id.btn_time);
