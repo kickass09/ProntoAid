@@ -18,6 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class login extends AppCompatActivity {
@@ -25,6 +30,8 @@ public class login extends AppCompatActivity {
     EditText iemail,ipassword;
     FirebaseAuth Auth;
     private TextView ForgotPassword;
+    String uname;
+    int flag=0;
     ProgressDialog progressDialog;
 
 
@@ -56,7 +63,7 @@ public class login extends AppCompatActivity {
         r.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = iemail.getText().toString();
+                final String email = iemail.getText().toString();
                 final String password = ipassword.getText().toString();
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -71,27 +78,67 @@ public class login extends AppCompatActivity {
                 progressDialog.show();
                 Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(login.this, new OnCompleteListener<AuthResult>(){
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful())
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        final DatabaseReference myRef = database.getReference("Customer");
+
+                        myRef.child("number_customer").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                //Log.i("Test2",email);
+                                int number = Integer.parseInt(dataSnapshot.getValue().toString());
+                                for(int x=1;x<=number;x++){
+
+                                    myRef.child(x+"").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                            uname = dataSnapshot.child("Username").getValue().toString();
+                                            //Log.i("Test3",email);
+                                            if (uname.equals(email)){
+                                                //Log.i("Test4",flag+"");
+                                                flag=1;}
+
+
+                                            //Log.i("Message",name);
+
+                                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                        }
+                                    });
+                                }
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+
+                        if (task.isSuccessful() && flag==1)
                         {
+                            flag=0;
+                            Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(login.this, Subject.class);
+                            startActivity(intent);
+                            finish();
+
+                        }
+                        else {
+                            progressDialog.dismiss();
                             if (password.length() < 6) {
                                 ipassword.setError(getString(R.string.minimum_password));
                             } else {
                                 Toast.makeText(login.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                             }
                         }
-                        else {
-                            Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(login.this, Subject.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    };
+                    }
 
                 });
+
 
             }
         });
         progressDialog.dismiss();
+
         ForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -104,6 +104,7 @@
         android:layout_marginEnd="49dp"
         android:layout_marginRight="49dp"
         android:layout_marginBottom="34dp"
+        android:background="@drawable/button_round"
 
         android:text="Login"
         app:layout_constraintBottom_toTopOf="@+id/button2"
@@ -119,6 +120,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="49dp"
         android:layout_marginLeft="49dp"
+        android:background="@drawable/button_round"
 
         android:layout_marginEnd="49dp"
         android:layout_marginRight="49dp"

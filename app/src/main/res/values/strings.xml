@@ -25,6 +25,6 @@
     <string name="SCHEDULE">schedule for Later</string>
     <string name="forgot_password">forgot password?</string>
     <string name="reset_password">reset password</string>
-    <string name="location">Location</string>
+    <string name="location">Location :</string>
 
 </resources>

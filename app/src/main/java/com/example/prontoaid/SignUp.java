@@ -76,11 +76,11 @@ public class SignUp extends AppCompatActivity {
         r.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email=iemail.getText().toString().trim();
-                String password=ipassword.getText().toString().trim();
+                final String email=iemail.getText().toString().trim();
+                final String password=ipassword.getText().toString().trim();
                 String cpassword=icpassword.getText().toString().trim();
-                String name=iname.getText().toString().trim();
-                String number=iphno.getText().toString().trim();
+                final String name=iname.getText().toString().trim();
+                final String number=iphno.getText().toString().trim();
 
                 if(TextUtils.isEmpty(name))
                 {
@@ -127,30 +127,26 @@ public class SignUp extends AppCompatActivity {
                             Toast.makeText(SignUp.this, "Authentication failed." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            /*FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-                            DatabaseReference myRef = database.getReference();
-                            myRef=myRef.child("Customer");
-                            myRef.child("2").child("Name").setValue(iname);
-
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            final DatabaseReference myRef = database.getReference("Customer");
                             myRef.child("number_customer").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    int number = Integer.parseInt(dataSnapshot.getValue().toString());
-                                    number+=1;
+                                    int number1 = Integer.parseInt(dataSnapshot.getValue().toString());
+                                    number1+=1;
+                                    //myRef=myRef.getParent();
+                                    myRef.child(number1+"").child("Name").setValue(name);
+                                    myRef.child(number1+"").child("Phone_Number").setValue(number);
+                                    myRef.child(number1+"").child("Username").setValue(email);
+                                    myRef.child(number1+"").child("Password").setValue(password);
 
-                                    myRef.child(number+"").child("Name").setValue(iname);
-                                    myRef.child(number+"").child("Username").setValue(iemail);
-                                    myRef.child(number+"").child("Password").setValue(ipassword);
-                                    myRef.child(number+"").child("Phone_Number").setValue(iphno.toString());
-
-                                    myRef.child("number_customers").setValue(number+"");
+                                    myRef.child("number_customer").setValue(number1+"");
                                 }
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
                                 }
-                            });*/
+                            });
 
                             startActivity(new Intent(SignUp.this, login.class));
                             finish();
