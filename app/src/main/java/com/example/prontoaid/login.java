@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class login extends AppCompatActivity {
     Button r,l;
@@ -31,13 +35,21 @@ public class login extends AppCompatActivity {
     FirebaseAuth Auth;
     private TextView ForgotPassword;
     String uname;
-
+    int flag=0,number;
     ProgressDialog progressDialog;
-
+    List<String> ulist = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference("Customer");
+
+
+
+
         FirebaseApp.initializeApp(this);
         Auth = FirebaseAuth.getInstance();
         setContentView(R.layout.login);
@@ -49,6 +61,7 @@ public class login extends AppCompatActivity {
         addListenerOnButton();
     }
     public void addListenerOnButton() {
+        flag=0;
         final Context context= this;
         progressDialog = new ProgressDialog(this);
         r= (Button) findViewById(R.id.button);
@@ -78,58 +91,46 @@ public class login extends AppCompatActivity {
                 progressDialog.show();
                 Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(login.this, new OnCompleteListener<AuthResult>(){
                     public void onComplete(@NonNull final Task<AuthResult> task) {
+
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         final DatabaseReference myRef = database.getReference("Customer");
 
-                        myRef.child("number_customer").addListenerForSingleValueEvent(new ValueEventListener() {
+                        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 //Log.i("Test2",email);
-                                int number = Integer.parseInt(dataSnapshot.getValue().toString());
-                                for(int x=1;x<=number;x++){
+                                number=Integer.parseInt(dataSnapshot.child("number_customer").getValue().toString());
+                                int n=1;
+                                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
 
-                                    myRef.child(x+"").addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                    String uname = postSnapshot.child("Username").getValue(String.class);
+                                    Log.i("uname",uname);
+                                    if (uname.equals(email)) {
+                                        //Log.i("Test4",flag+"");
+                                        if (task.isSuccessful()) {
+                                            flag = 1;
+                                            progressDialog.dismiss();
+                                            Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(login.this, Subject.class);
+                                            startActivity(intent);
 
-                                            uname = dataSnapshot.child("Username").getValue().toString();
-                                            //Log.i("Test3",email);
-                                            if (uname.equals(email)){
-                                                //Log.i("Test4",flag+"");
-                                                if (task.isSuccessful())
-                                                {
-                                                    Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
-                                                    Intent intent = new Intent(login.this, Subject.class);
-                                                    startActivity(intent);
-                                                    finish();
-
-                                                }
-                                                else {
-                                                    progressDialog.dismiss();
-                                                    if (password.length() < 6) {
-                                                        ipassword.setError(getString(R.string.minimum_password));
-                                                    } else {
-                                                        Toast.makeText(login.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
-                                                    }
-                                                }
-                                                }
-
-
-                                            //Log.i("Message",name);
+                                            }
 
                                         }
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-                                        }
-                                    });
+                                    if (n==number)
+                                        break;
+                                    n++;
+
+                                    }
+                                if (flag==0){
+                                    progressDialog.dismiss();
+                                    Toast.makeText(login.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                                 }
                             }
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
                             }
                         });
-
-
                     }
 
                 });
@@ -137,7 +138,6 @@ public class login extends AppCompatActivity {
 
             }
         });
-        progressDialog.dismiss();
 
         ForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,3 +150,8 @@ public class login extends AppCompatActivity {
     }}
 
 
+/*Connected disconnected
+DatabaseReference presenceRef = FirebaseDatabase.getInstance().getReference("disconnectmessage");
+// Write a string when this client loses connection
+presenceRef.onDisconnect().setValue("I disconnected!");
+ */
