@@ -3,6 +3,7 @@ package com.example.prontoaid;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,26 +23,24 @@ import java.util.List;
 
 
 public class Subject extends AppCompatActivity implements View.OnClickListener {
-    Button btnDatePicker, btnTimePicker;
+    Button btnDatePicker, btnTimePicker, btnsearch;
     EditText txtDate, txtTime;
     private int mYear, mMonth, mDay, mHour, mMinute;
 
-//    Button radioButton = findViewById(R.id.radioButton);
+    //    Button radioButton = findViewById(R.id.radioButton);
     public void onRadioButtonClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
 
 
-
         // Check which radio button was clicked
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.radioButton:
                 Button btn_date = (Button) this.findViewById(R.id.btn_date);
                 Button btn_time = (Button) this.findViewById(R.id.btn_time);
                 TextView in_date = (TextView) this.findViewById(R.id.in_date);
                 TextView in_time = (TextView) this.findViewById(R.id.in_time);
-                if (checked)
-                {
+                if (checked) {
 
                     btn_date.setVisibility(View.GONE);
 
@@ -63,11 +62,10 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                     in_date1.setVisibility(View.VISIBLE);
                     TextView in_time1 = (TextView) this.findViewById(R.id.in_time);
                     in_time1.setVisibility(View.VISIBLE);
-                   break;}
+                    break;
+                }
         }
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,13 +91,15 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories2);
         spinner2.setAdapter(dataAdapter2);
         //final RelativeLayout rl = (RelativeLayout) findViewById(R.id.rl);
-        btnDatePicker=(Button)findViewById(R.id.btn_date);
-        btnTimePicker=(Button)findViewById(R.id.btn_time);
-        txtDate=(EditText)findViewById(R.id.in_date);
-        txtTime=(EditText)findViewById(R.id.in_time);
+        btnDatePicker = (Button) findViewById(R.id.btn_date);
+        btnTimePicker = (Button) findViewById(R.id.btn_time);
+        btnsearch = (Button) findViewById(R.id.search);
+        txtDate = (EditText) findViewById(R.id.in_date);
+        txtTime = (EditText) findViewById(R.id.in_time);
 
         btnDatePicker.setOnClickListener(this);
         btnTimePicker.setOnClickListener(this);
+        btnsearch.setOnClickListener(this);
 
     }
 
@@ -127,10 +127,10 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
 
                         }
                     }, mYear, mMonth, mDay);
-            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
             long now = System.currentTimeMillis() - 1000;
             datePickerDialog.getDatePicker().setMinDate(now);
-            datePickerDialog.getDatePicker().setMaxDate(now+(1000*60*60*24*3));
+            datePickerDialog.getDatePicker().setMaxDate(now + (1000 * 60 * 60 * 24 * 3));
 
             datePickerDialog.show();
         }
@@ -155,6 +155,11 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
 
             timePickerDialog.show();
         }
+        if (v == btnsearch){
+            Intent intent = new Intent(Subject.this, Result.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -165,6 +170,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         Intent intent = new Intent(Subject.this, login.class);
         startActivity(intent);
     }
+
+
 }
 
 
