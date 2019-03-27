@@ -138,7 +138,6 @@ public class SignUp extends AppCompatActivity {
                                     myRef.child(number1+"").child("Name").setValue(name);
                                     myRef.child(number1+"").child("Phone_Number").setValue(number);
                                     myRef.child(number1+"").child("Username").setValue(email);
-                                    myRef.child(number1+"").child("Password").setValue(password);
 
                                     myRef.child("number_customer").setValue(number1+"");
                                 }
