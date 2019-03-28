@@ -23,7 +23,7 @@ public class Result extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
-        worklist=findViewById(R.id.textView6);
+
         String job = getIntent().getStringExtra("for_job");
         //Log.i("Job Kitti",job);
 
@@ -40,6 +40,7 @@ public class Result extends AppCompatActivity  {
 
                 if (!dataSnapshot.exists()){
                     Log.d("Active Workers", "None");
+                    worklist=findViewById(R.id.textView6);
                     worklist.setText("Active Workers: None");
                   }
                 int no=0;
