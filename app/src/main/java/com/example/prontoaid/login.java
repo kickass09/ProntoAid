@@ -40,14 +40,8 @@ public class login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("Customer");
-
-
-
-
         FirebaseApp.initializeApp(this);
         Auth = FirebaseAuth.getInstance();
         setContentView(R.layout.login);
@@ -55,7 +49,6 @@ public class login extends AppCompatActivity {
         ipassword = (EditText) findViewById(R.id.editText2);
         Auth = FirebaseAuth.getInstance();
         ForgotPassword = (TextView)findViewById(R.id.tvForgotPassword);
-
         addListenerOnButton();
     }
     public void addListenerOnButton() {
@@ -114,8 +107,6 @@ public class login extends AppCompatActivity {
                                             //myRef.child(n+"").child("Available").setValue("Online");
                                             //myRef.child(n+"").child("Available").onDisconnect().setValue("Disconnected");
                                             Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
-
-
                                             Intent intent = new Intent(login.this, Subject.class);
                                             startActivity(intent);
                                             finish();
@@ -138,20 +129,12 @@ public class login extends AppCompatActivity {
                     }
 
                 });
-
-
             }
         });
-
         ForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 startActivity(new Intent(login.this, PasswordActivity.class));
             }
         });
-
-
     }}
-
-

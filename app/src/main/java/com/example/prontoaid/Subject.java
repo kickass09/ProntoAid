@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -25,6 +27,7 @@ import java.util.List;
 public class Subject extends AppCompatActivity implements View.OnClickListener {
     Button btnDatePicker, btnTimePicker, btnsearch;
     EditText txtDate, txtTime;
+    String job;
     private int mYear, mMonth, mDay, mHour, mMinute;
 
     //    Button radioButton = findViewById(R.id.radioButton);
@@ -73,7 +76,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.subject);
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         //spinner.setOnItemSelectedListener(this);
-        List<String> categories = new ArrayList<String>();
+        final List<String> categories = new ArrayList<String>();
         categories.add("Plumber");
         categories.add("Electrician");
         categories.add("House Cleaner");
@@ -81,6 +84,22 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         //categories.add("Call Girl");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         spinner.setAdapter(dataAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                job=categories.get(position);
+                Log.i("Selected Job ",job);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
         Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
         //spinner.setOnItemSelectedListener(this);
         List<String> categories2 = new ArrayList<String>();
@@ -157,6 +176,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         }
         if (v == btnsearch){
             Intent intent = new Intent(Subject.this, Result.class);
+            //Log.d("Jobss",job);
+            intent.putExtra("for_job",job);
             startActivity(intent);
             finish();
         }

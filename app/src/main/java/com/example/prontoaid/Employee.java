@@ -1,6 +1,5 @@
 package com.example.prontoaid;
 
-
 public class Employee {
     String AvailableNow;
     String Loc;
