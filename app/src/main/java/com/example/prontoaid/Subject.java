@@ -27,7 +27,7 @@ import java.util.List;
 public class Subject extends AppCompatActivity implements View.OnClickListener {
     Button btnDatePicker, btnTimePicker, btnsearch;
     EditText txtDate, txtTime;
-    String job,loc;
+    String job,loc,name,phone;
     private int mYear, mMonth, mDay, mHour, mMinute;
 
     //    Button radioButton = findViewById(R.id.radioButton);
@@ -191,7 +191,6 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             //Log.d("Jobss",job);
             intent.putExtra("for_job",job);
             intent.putExtra("for_loc",loc);
-            Log.i("Selected location ",loc);
             startActivity(intent);
             finish();
         }

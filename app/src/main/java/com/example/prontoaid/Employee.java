@@ -1,16 +1,16 @@
 package com.example.prontoaid;
 
 public class Employee {
-    String AvailableNow;
+
     String Loc;
     String User;
+    String Phone_Number;
+    String Emp_Name;
 
-    public String getAvailable() {
-        return AvailableNow;
-    }
 
-    public void setAvailable(String available) {
-        AvailableNow = available;
+    public String getContact() { return Phone_Number;   }
+
+    public void setContact(String phone) {     Phone_Number = phone;
     }
 
     public String getLocation() {
@@ -29,10 +29,16 @@ public class Employee {
         User = username;
     }
 
-    public Employee(String available, String location, String username) {
-        AvailableNow = available;
+    public String getName(){ return Emp_Name;}
+
+    public void setName(String emp_Name){Emp_Name=emp_Name; }
+
+    public Employee(String location, String username, String phone, String emp_Name  ) {
+
         Loc = location;
         User = username;
+        Phone_Number = phone;
+        Emp_Name = emp_Name;
     }
 
     public Employee() {
