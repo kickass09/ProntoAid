@@ -28,7 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class login extends AppCompatActivity {
     Button r,l;
     EditText iemail,ipassword;
@@ -106,17 +105,18 @@ public class login extends AppCompatActivity {
                                             //Disconnection
                                             //myRef.child(n+"").child("Available").setValue("Online");
                                             //myRef.child(n+"").child("Available").onDisconnect().setValue("Disconnected");
+
                                             Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(login.this, Subject.class);
                                             startActivity(intent);
                                             finish();
-                                            }
                                         }
+                                    }
                                     if (n==number)
                                         break;
                                     n++;
 
-                                    }
+                                }
                                 if (flag==0){
                                     progressDialog.dismiss();
                                     Toast.makeText(login.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
@@ -138,3 +138,4 @@ public class login extends AppCompatActivity {
             }
         });
     }}
+

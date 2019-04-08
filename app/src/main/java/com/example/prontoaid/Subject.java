@@ -27,7 +27,7 @@ import java.util.List;
 public class Subject extends AppCompatActivity implements View.OnClickListener {
     Button btnDatePicker, btnTimePicker, btnsearch;
     EditText txtDate, txtTime;
-    String job;
+    String job,loc;
     private int mYear, mMonth, mDay, mHour, mMinute;
 
     //    Button radioButton = findViewById(R.id.radioButton);
@@ -102,7 +102,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
 
         Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
         //spinner.setOnItemSelectedListener(this);
-        List<String> categories2 = new ArrayList<String>();
+        final List<String> categories2 = new ArrayList<String>();
         categories2.add("Kakkanad");
         categories2.add("Vytila");
         categories2.add("Thripunithura");
@@ -110,6 +110,18 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories2);
         spinner2.setAdapter(dataAdapter2);
         //final RelativeLayout rl = (RelativeLayout) findViewById(R.id.rl);
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                loc=categories2.get(position);
+                //Log.i("Selected Location ",loc);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         btnDatePicker = (Button) findViewById(R.id.btn_date);
         btnTimePicker = (Button) findViewById(R.id.btn_time);
         btnsearch = (Button) findViewById(R.id.search);
@@ -178,6 +190,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             Intent intent = new Intent(Subject.this, Result.class);
             //Log.d("Jobss",job);
             intent.putExtra("for_job",job);
+            intent.putExtra("for_loc",loc);
+            Log.i("Selected location ",loc);
             startActivity(intent);
             finish();
         }
