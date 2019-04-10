@@ -1,12 +1,15 @@
 package com.example.prontoaid;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,20 +24,46 @@ public class Result extends AppCompatActivity  {
     ArrayList activeEmployess = new ArrayList<Employee>();
     String places_loc[][]={{"Kakkanad","1","2"},{"Vytila","5","2"},{"Thripunithura","7","4"},{"Palarivattom","6","1"}};
     double distance,best_distance;
-    int customer_loc;
-    String loc,name,job,phone;
+    int customer_loc,r_no;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef1;
+    String loc,name,job,phone,uname,cusname,cusnum;
     TextView worklist;
+    Button taskover;
+
+
+    public void task_complete(View view){
+
+        myRef1 = database.getReference("Assigned");
+        myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                myRef1.child(r_no+"").removeValue();
+                Intent intent = new Intent(Result.this, Subject.class);
+                startActivity(intent);
+                finish();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+
+        taskover = findViewById(R.id.taskover);
 
         job = getIntent().getStringExtra("for_job");
         loc = getIntent().getStringExtra("for_loc");
         //Log.i("Job Kitti",job);
 
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Jobs");
         //if (myRef.child(job)==null)
             //Log.d("Acive Workers: ","None");
@@ -86,9 +115,44 @@ public class Result extends AppCompatActivity  {
                                 Log.d("Active Distance: ", distance + "");
                                 if (best_distance>distance){
                                     best_distance=distance;
+                                    uname=((Employee) activeEmployess.get(i)).getUsername();
                                     name=((Employee) activeEmployess.get(i)).getName();
                                     phone=((Employee) activeEmployess.get(i)).getContact();
                                     details=job+" "+name+" has been assigned to you\nContact: "+phone;
+                                    taskover.setVisibility(View.VISIBLE);
+
+                                    myRef1 = database.getReference("Assigned");
+                                    myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            int number = (int)dataSnapshot.getChildrenCount();
+                                            number++;
+                                            //myRef=myRef.getParent();
+
+
+                                            SharedPreferences sp = getSharedPreferences("logindata" , MODE_PRIVATE);
+                                            cusname = sp.getString("name","null");
+                                            cusnum =  sp.getString("phone","null");
+
+
+                                            r_no=number;
+                                            myRef1.child(number+"").child("Worker_User").setValue(uname);
+                                            myRef1.child(number+"").child("Customer_Name").setValue(cusname);
+                                            myRef1.child(number+"").child("Customer_Contact").setValue(cusnum);
+                                            myRef1.child(number+"").child("Customer_Location").setValue(places_loc[customer_loc][0]);
+                                            //myRef1.child(number+"").onDisconnect().removeValue();
+
+                                            //if(myRef1.child())
+
+                                            //int number2=(int)dataSnapshot.getChildrenCount();
+                                            //int number2=(int)dataSnapshot.getParent().child("Jobs").getChildre
+                                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                        }
+                                    });
+
+
                                     worklist = findViewById(R.id.textView7);
                                     worklist.setText(details);
                                 }
@@ -108,9 +172,21 @@ public class Result extends AppCompatActivity  {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
-        Intent intent = new Intent(Result.this, Subject.class);
-        startActivity(intent);
+        myRef1 = database.getReference("Assigned");
+        myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                myRef1.child(r_no+"").removeValue();
+                finish();
+                Intent intent = new Intent(Result.this, Subject.class);
+                startActivity(intent);
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
 
 

@@ -19,6 +19,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -29,6 +35,9 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     EditText txtDate, txtTime;
     String job,loc,name,phone;
     private int mYear, mMonth, mDay, mHour, mMinute;
+    int number;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("Assigned");
 
     //    Button radioButton = findViewById(R.id.radioButton);
     public void onRadioButtonClicked(View view) {
@@ -187,8 +196,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             timePickerDialog.show();
         }
         if (v == btnsearch){
+
             Intent intent = new Intent(Subject.this, Result.class);
-            //Log.d("Jobss",job);
             intent.putExtra("for_job",job);
             intent.putExtra("for_loc",loc);
             startActivity(intent);

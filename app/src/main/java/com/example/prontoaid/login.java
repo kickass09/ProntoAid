@@ -3,6 +3,7 @@ package com.example.prontoaid;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -96,6 +97,10 @@ public class login extends AppCompatActivity {
                                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
 
                                     String uname = postSnapshot.child("Username").getValue(String.class);
+                                    String name = postSnapshot.child("Name").getValue(String.class);
+                                    String phone = postSnapshot.child("Phone_Number").getValue(String.class);
+
+
                                     //Log.i("uname",uname);
                                     if (uname.equals(email)) {
                                         //Log.i("Test4",flag+"");
@@ -105,6 +110,11 @@ public class login extends AppCompatActivity {
                                             //Disconnection
                                             //myRef.child(n+"").child("Available").setValue("Online");
                                             //myRef.child(n+"").child("Available").onDisconnect().setValue("Disconnected");
+
+                                            SharedPreferences sp = getSharedPreferences("logindata" , Context.MODE_PRIVATE);
+                                            sp.edit().putString("name",name).commit();
+                                            sp.edit().putString("phone",phone).commit();
+
 
                                             Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(login.this, Subject.class);
