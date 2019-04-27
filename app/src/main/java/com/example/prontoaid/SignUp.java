@@ -151,8 +151,6 @@ public class SignUp extends AppCompatActivity {
                     }
                 });
                 //progressDialog.dismiss();
-
-
             }
         });
         progressDialog.dismiss();
@@ -160,4 +158,3 @@ public class SignUp extends AppCompatActivity {
     }
 
 }
-

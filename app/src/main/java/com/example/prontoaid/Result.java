@@ -1,5 +1,4 @@
 package com.example.prontoaid;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -9,27 +8,28 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Result extends AppCompatActivity  {
     //Bundle extras = getIntent().getExtras();
     ArrayList activeEmployess = new ArrayList<Employee>();
     String places_loc[][]={{"Kakkanad","1","2"},{"Vytila","5","2"},{"Thripunithura","7","4"},{"Palarivattom","6","1"}};
+    String uid,tid;
     double distance,best_distance;
     int customer_loc,r_no;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef1;
+    DatabaseReference myRef1,myRef,myRef2;
     String loc,name,job,phone,uname,cusname,cusnum;
     TextView worklist;
     Button taskover;
+    int empno;
 
 
     public void task_complete(View view){
@@ -39,7 +39,8 @@ public class Result extends AppCompatActivity  {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                myRef1.child(r_no+"").removeValue();
+                myRef1.child(uid).removeValue();
+                myRef2.child(job).child(tid).setValue(activeEmployess.get(empno));
                 Intent intent = new Intent(Result.this, Subject.class);
                 startActivity(intent);
                 finish();
@@ -64,7 +65,8 @@ public class Result extends AppCompatActivity  {
 
 
         //FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Jobs");
+        myRef = database.getReference("Jobs");
+        myRef2=database.getReference("Jobs");
         //if (myRef.child(job)==null)
             //Log.d("Acive Workers: ","None");
 
@@ -119,33 +121,60 @@ public class Result extends AppCompatActivity  {
                                     name=((Employee) activeEmployess.get(i)).getName();
                                     phone=((Employee) activeEmployess.get(i)).getContact();
                                     details=job+" "+name+" has been assigned to you\nContact: "+phone;
+                                    empno=i;
                                     taskover.setVisibility(View.VISIBLE);
 
                                     myRef1 = database.getReference("Assigned");
                                     myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            int number = (int)dataSnapshot.getChildrenCount();
-                                            number++;
+
                                             //myRef=myRef.getParent();
-
-
                                             SharedPreferences sp = getSharedPreferences("logindata" , MODE_PRIVATE);
                                             cusname = sp.getString("name","null");
                                             cusnum =  sp.getString("phone","null");
 
+                                            uid = myRef1.push().getKey();
+                                            Map data = new HashMap();
+                                            data.put("Worker_User", uname);
+                                            data.put("Customer_Name", cusname);
+                                            data.put("Customer_Contact", cusnum);
+                                            data.put("Customer_Location", places_loc[customer_loc][0]);
+                                            myRef1.child(uid).setValue(data);
+                                            Log.d("User Worker again", uname);
+                                            myRef=myRef.child(job);
+                                            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                                        //String tid = postSnapshot.getKey();
+                                                        String username = postSnapshot.child("User").getValue(String.class);
+                                                        Log.d("Username tid", username);
+                                                        //activeEmployess.add(e);
+                                                        //Log.d("Users Again", e.getUsername());
+                                                        if (uname.equals(username)) {
+                                                            tid = postSnapshot.getKey();
+                                                            Log.d("Testing again", tid);
+                                                            myRef2.child(job).child(tid).removeValue();
+                                                        }
+                                                            //myRef.child(uid).removeValue();
+                                                        //Log.d("trial3",((Employee)activeEmployess.get(0)).getUsername());
 
-                                            r_no=number;
+                                                        //Log.d("trial2",Integer.toString(activeEmployess.size()));
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                    //
+                                                }
+                                            });
+                                            /*
                                             myRef1.child(number+"").child("Worker_User").setValue(uname);
                                             myRef1.child(number+"").child("Customer_Name").setValue(cusname);
                                             myRef1.child(number+"").child("Customer_Contact").setValue(cusnum);
                                             myRef1.child(number+"").child("Customer_Location").setValue(places_loc[customer_loc][0]);
-                                            //myRef1.child(number+"").onDisconnect().removeValue();
-
-                                            //if(myRef1.child())
-
-                                            //int number2=(int)dataSnapshot.getChildrenCount();
-                                            //int number2=(int)dataSnapshot.getParent().child("Jobs").getChildre
+                                            */
                                         }
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {
@@ -167,28 +196,31 @@ public class Result extends AppCompatActivity  {
 
             }
         });
-    }
+     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        myRef1 = database.getReference("Assigned");
+        /*myRef1 = database.getReference("Assigned");
         myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                myRef1.child(r_no+"").removeValue();
-                finish();
-                Intent intent = new Intent(Result.this, Subject.class);
-                startActivity(intent);
-
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(uid)) {
+                    finish();
+                    Intent intent = new Intent(Result.this, Subject.class);
+                    startActivity(intent);
+                }
             }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
-        });
+        });*/
 
-
+        finish();
+        Intent intent = new Intent(Result.this, Subject.class);
+        startActivity(intent);
 
     }
 }

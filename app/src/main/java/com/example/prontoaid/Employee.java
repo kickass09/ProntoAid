@@ -7,11 +7,9 @@ public class Employee {
     String Phone_Number;
     String Emp_Name;
 
-
     public String getContact() { return Phone_Number;   }
 
-    public void setContact(String phone) {     Phone_Number = phone;
-    }
+    public void setContact(String phone) {     Phone_Number = phone; }
 
     public String getLocation() {
         return Loc;
@@ -41,6 +39,5 @@ public class Employee {
         Emp_Name = emp_Name;
     }
 
-    public Employee() {
-    }
+    public Employee() { }
 }
