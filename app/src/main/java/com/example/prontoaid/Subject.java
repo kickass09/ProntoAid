@@ -40,6 +40,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Assigned");
     TextView job_amount;
+    //RadioGroup check_pay;
+    //check_pay = (RadioGroup) findViewById(R.id.radioGroup);
     //int GOOGLE_PAY_REQUEST_CODE = 123;
 
     //    Button radioButton = findViewById(R.id.radioButton);

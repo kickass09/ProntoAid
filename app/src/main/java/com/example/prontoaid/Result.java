@@ -73,9 +73,6 @@ public class Result extends AppCompatActivity  {
             }
         });
 
-
-
-
     }
 
     @Override

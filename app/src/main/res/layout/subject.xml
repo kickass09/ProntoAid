@@ -44,7 +44,7 @@
         android:layout_marginRight="49dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/button_round"
-        android:text="@string/Search"
+        android:text="Book Now"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -176,6 +176,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onRadioButtonClicked"
+            android:checked="true"
             android:text="@string/ASAP" />
 
         <RadioButton
@@ -255,14 +256,15 @@
         app:layout_constraintVertical_bias="0.878">
 
         <RadioButton
-            android:id="@+id/radioButton4"
+            android:id="@+id/radioCash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cash" />
+            android:checked="true"
+            android:text="Cash on completion" />
 
         <RadioButton
-            android:id="@+id/radioButton3"
+            android:id="@+id/radioGoogle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -296,10 +298,10 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintHorizontal_bias="0.429"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.873"
+        app:layout_constraintVertical_bias="0.871"
         app:srcCompat="@drawable/googleg_standard_color_18" />
 
     <ImageView
@@ -332,10 +334,10 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.337"
+        app:layout_constraintHorizontal_bias="0.584"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.812"
+        app:layout_constraintVertical_bias="0.813"
         app:srcCompat="@drawable/cash" />
 
 </android.support.constraint.ConstraintLayout>
