@@ -87,13 +87,11 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subject);
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        //spinner.setOnItemSelectedListener(this);
         final List<String> categories = new ArrayList<String>();
         categories.add("Plumber");
         categories.add("Electrician");
         categories.add("House Cleaner");
         categories.add("Carpenter");
-        //categories.add("Call Girl");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         spinner.setAdapter(dataAdapter);
 
@@ -126,8 +124,6 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
-
-
 
         Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
         //spinner.setOnItemSelectedListener(this);
@@ -229,32 +225,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             startActivity(intent);
             finish();
         }
-        /*if (v == btnPayNow) {
-            // code for showing payment
-            Toast paynow = Toast.makeText(getApplicationContext(),"Pay now-",Toast.LENGTH_SHORT);
-            paynow.show();
-            String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
 
-
-            Uri uri =
-                    new Uri.Builder()
-                            .scheme("upi")
-                            .authority("pay")
-                            .appendQueryParameter("pa", "shaunritty-1@okicici")
-                            .appendQueryParameter("pn", "Shaun Ritty")
-                            .appendQueryParameter("mc", "1234")
-                            .appendQueryParameter("tr", "983638Pronto")
-                            .appendQueryParameter("tn", "Service Payment")
-                            .appendQueryParameter("am", "1")
-                            .appendQueryParameter("cu", "INR")
-                            .appendQueryParameter("url", "www.google.com")
-                            .build();
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(uri);
-            intent.setPackage(GOOGLE_PAY_PACKAGE_NAME);
-            startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
-
-        }*/
     }
 
     @Override
@@ -265,19 +236,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         Intent intent = new Intent(Subject.this, login.class);
         startActivity(intent);
     }
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("Result Code of payment:",Integer.toString(resultCode));
-        if (requestCode == GOOGLE_PAY_REQUEST_CODE) {
-            // Process based on the data in response.
-            String status=data.getStringExtra("Status");
-            Log.d("result of google pay",status );
-            Toast paystatus = Toast.makeText(getApplicationContext(),status,Toast.LENGTH_SHORT);
-        }
-    }
-    */
+
 }
 
 
