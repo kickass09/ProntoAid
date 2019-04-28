@@ -157,11 +157,6 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         btnTimePicker.setOnClickListener(this);
         btnsearch.setOnClickListener(this);
 
-        //Pay now button
-        //btnPayNow = (Button)findViewById(R.id.paynow);
-
-        //btnPayNow.setOnClickListener(this);
-
     }
 
     @Override
