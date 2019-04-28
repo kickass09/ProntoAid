@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -220,6 +221,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             timePickerDialog.show();
         }
         if (v == btnsearch){
+
 
             Intent intent = new Intent(Subject.this, Result.class);
             intent.putExtra("for_job",job);
