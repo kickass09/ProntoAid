@@ -1,6 +1,4 @@
 package com.example.prontoaid;
-
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -37,10 +35,11 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     EditText txtDate, txtTime;
     String job,loc,name,phone;
     private int mYear, mMonth, mDay, mHour, mMinute;
-    int number;
+    //int amount_job;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Assigned");
-    int GOOGLE_PAY_REQUEST_CODE = 123;
+    TextView job_amount;
+    //int GOOGLE_PAY_REQUEST_CODE = 123;
 
     //    Button radioButton = findViewById(R.id.radioButton);
     public void onRadioButtonClicked(View view) {
@@ -102,6 +101,23 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 job=categories.get(position);
                 Log.i("Selected Job ",job);
+                if (job.equals("Carpenter")) {
+                    job_amount = findViewById(R.id.job_Amount);
+                    job_amount.setText("Rs 250");
+                    }
+                else if (job.equals("Plumber")) {
+                    job_amount = findViewById(R.id.job_Amount);
+                    job_amount.setText("Rs 300");
+                }
+                else if (job.equals("Electrician")) {
+                    job_amount = findViewById(R.id.job_Amount);
+                    job_amount.setText("Rs 350");
+                }
+                else {
+                    job_amount = findViewById(R.id.job_Amount);
+                    job_amount.setText("Rs 300");
+                }
+
             }
 
             @Override
@@ -145,9 +161,9 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         btnsearch.setOnClickListener(this);
 
         //Pay now button
-        btnPayNow = (Button)findViewById(R.id.paynow);
+        //btnPayNow = (Button)findViewById(R.id.paynow);
 
-        btnPayNow.setOnClickListener(this);
+        //btnPayNow.setOnClickListener(this);
 
     }
 
@@ -211,7 +227,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             startActivity(intent);
             finish();
         }
-        if (v == btnPayNow) {
+        /*if (v == btnPayNow) {
             // code for showing payment
             Toast paynow = Toast.makeText(getApplicationContext(),"Pay now-",Toast.LENGTH_SHORT);
             paynow.show();
@@ -222,21 +238,21 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                     new Uri.Builder()
                             .scheme("upi")
                             .authority("pay")
-                            .appendQueryParameter("pa", "your-merchant-vpa@xxx")
-                            .appendQueryParameter("pn", "your-merchant-name")
-                            .appendQueryParameter("mc", "your-merchant-code")
-                            .appendQueryParameter("tr", "your-transaction-ref-id")
-                            .appendQueryParameter("tn", "your-transaction-note")
-                            .appendQueryParameter("am", "your-order-amount")
+                            .appendQueryParameter("pa", "shaunritty-1@okicici")
+                            .appendQueryParameter("pn", "Shaun Ritty")
+                            .appendQueryParameter("mc", "1234")
+                            .appendQueryParameter("tr", "983638Pronto")
+                            .appendQueryParameter("tn", "Service Payment")
+                            .appendQueryParameter("am", "1")
                             .appendQueryParameter("cu", "INR")
-                            .appendQueryParameter("url", "your-transaction-url")
+                            .appendQueryParameter("url", "www.google.com")
                             .build();
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(uri);
             intent.setPackage(GOOGLE_PAY_PACKAGE_NAME);
             startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
 
-        }
+        }*/
     }
 
     @Override
@@ -247,7 +263,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         Intent intent = new Intent(Subject.this, login.class);
         startActivity(intent);
     }
-
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -259,6 +275,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             Toast paystatus = Toast.makeText(getApplicationContext(),status,Toast.LENGTH_SHORT);
         }
     }
+    */
 }
 
 
