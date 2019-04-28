@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +33,7 @@ import java.util.List;
 
 
 public class Subject extends AppCompatActivity implements View.OnClickListener {
-    Button btnDatePicker, btnTimePicker, btnsearch;
+    Button btnDatePicker, btnTimePicker, btnsearch, btnPayNow;
     EditText txtDate, txtTime;
     String job,loc,name,phone;
     private int mYear, mMonth, mDay, mHour, mMinute;
@@ -141,6 +143,11 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         btnTimePicker.setOnClickListener(this);
         btnsearch.setOnClickListener(this);
 
+        //Pay now button
+        btnPayNow = (Button)findViewById(R.id.paynow);
+
+        btnPayNow.setOnClickListener(this);
+
     }
 
     @Override
@@ -202,6 +209,32 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             intent.putExtra("for_loc",loc);
             startActivity(intent);
             finish();
+        }
+        if (v == btnPayNow) {
+            // code for showing payment
+            Toast paynow = Toast.makeText(getApplicationContext(),"Pay now-",Toast.LENGTH_SHORT);
+            paynow.show();
+            String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
+            int GOOGLE_PAY_REQUEST_CODE = 123;
+
+            Uri uri =
+                    new Uri.Builder()
+                            .scheme("upi")
+                            .authority("pay")
+                            .appendQueryParameter("pa", "your-merchant-vpa@xxx")
+                            .appendQueryParameter("pn", "your-merchant-name")
+                            .appendQueryParameter("mc", "your-merchant-code")
+                            .appendQueryParameter("tr", "your-transaction-ref-id")
+                            .appendQueryParameter("tn", "your-transaction-note")
+                            .appendQueryParameter("am", "your-order-amount")
+                            .appendQueryParameter("cu", "INR")
+                            .appendQueryParameter("url", "your-transaction-url")
+                            .build();
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(uri);
+            intent.setPackage(GOOGLE_PAY_PACKAGE_NAME);
+            startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
+
         }
     }
 
