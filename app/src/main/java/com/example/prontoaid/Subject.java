@@ -40,6 +40,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     int number;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Assigned");
+    int GOOGLE_PAY_REQUEST_CODE = 123;
 
     //    Button radioButton = findViewById(R.id.radioButton);
     public void onRadioButtonClicked(View view) {
@@ -215,7 +216,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             Toast paynow = Toast.makeText(getApplicationContext(),"Pay now-",Toast.LENGTH_SHORT);
             paynow.show();
             String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
-            int GOOGLE_PAY_REQUEST_CODE = 123;
+
 
             Uri uri =
                     new Uri.Builder()
@@ -247,7 +248,15 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         startActivity(intent);
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("Result Code of payment:",Integer.toString(resultCode));
+        if (requestCode == GOOGLE_PAY_REQUEST_CODE) {
+            // Process based on the data in response.
+            Log.d("result of google pay", data.getStringExtra("Status"));
+        }
+    }
 }
 
 
