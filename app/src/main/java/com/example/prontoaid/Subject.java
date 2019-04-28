@@ -254,7 +254,9 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         Log.d("Result Code of payment:",Integer.toString(resultCode));
         if (requestCode == GOOGLE_PAY_REQUEST_CODE) {
             // Process based on the data in response.
-            Log.d("result of google pay", data.getStringExtra("Status"));
+            String status=data.getStringExtra("Status");
+            Log.d("result of google pay",status );
+            Toast paystatus = Toast.makeText(getApplicationContext(),status,Toast.LENGTH_SHORT);
         }
     }
 }
