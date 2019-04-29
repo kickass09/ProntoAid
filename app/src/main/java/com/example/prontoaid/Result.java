@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,17 +27,15 @@ public class Result extends AppCompatActivity  {
     double distance,best_distance;
     int customer_loc,r_no;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef1,myRef,myRef2;
-    String loc,name,job,phone,uname,cusname,cusnum;
+    DatabaseReference myRef1,myRef,myRef2,refloc;
+    String loc,name,job,phone,uname,cusname,cusnum,select_pay;
     TextView worklist;
     Button taskover;
-    int GOOGLE_PAY_REQUEST_CODE = 123;
-    int empno;
-    String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
+    int empno,amount;
+    //String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user",select_pay;
 
     public void task_complete(View view){
-        Toast paynow = Toast.makeText(getApplicationContext(),"Pay now-",Toast.LENGTH_SHORT);
-        paynow.show();
+
 
         myRef1 = database.getReference("Assigned");
         myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -47,26 +44,32 @@ public class Result extends AppCompatActivity  {
 
                 myRef1.child(uid).removeValue();
                 myRef2.child(job).child(tid).setValue(activeEmployess.get(empno));
-                /*Intent intent = new Intent(Result.this, Subject.class);
+                if (select_pay.equals("Cash on completion")) {
+                    switch (job) {
+                        case "Carpenter":
+                            amount=250;
+                            break;
+                        case "Plumber":
+                            amount=300;
+                            break;
+                        case "Electrician":
+                            amount=350;
+                            break;
+                        case "House Cleaner":
+                            amount=300;
+                            break;
+                        default:
+                            break;
+
+                        }
+                    Toast.makeText(Result.this, "Please pay Rs"+amount, Toast.LENGTH_SHORT).show();
+                    }
+                refloc=database.getReference("UpdateLocation");
+                refloc.setValue("0");
+                finish();
+                Intent intent = new Intent(Result.this, Subject.class);
                 startActivity(intent);
-                finish();*/
-                Uri uri =
-                        new Uri.Builder()
-                                .scheme("upi")
-                                .authority("pay")
-                                .appendQueryParameter("pa", "tevinjose97@okaxis")
-                                .appendQueryParameter("pn", "Tevin Jose")
-                                .appendQueryParameter("mc", "1234")
-                                .appendQueryParameter("tr", "983638Pronto")
-                                .appendQueryParameter("tn", "Service Payment")
-                                .appendQueryParameter("am", "1")
-                                .appendQueryParameter("cu", "INR")
-                                .appendQueryParameter("url", "www.google.com")
-                                .build();
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(uri);
-                intent.setPackage(GOOGLE_PAY_PACKAGE_NAME);
-                startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -81,30 +84,22 @@ public class Result extends AppCompatActivity  {
         setContentView(R.layout.activity_result);
 
         taskover = findViewById(R.id.taskover);
+        SharedPreferences sp = getSharedPreferences("logindata" , MODE_PRIVATE);
+        job = sp.getString("for_job","null");
 
-        job = getIntent().getStringExtra("for_job");
-        loc = getIntent().getStringExtra("for_loc");
-        //Log.i("Job Kitti",job);
-
-
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
+        loc =  sp.getString("for_loc","null");
+        //job = getIntent().getStringExtra("for_job");
+        //loc = getIntent().getStringExtra("for_loc");
+        select_pay = sp.getString("for_pay","null");
+        //Log.d("Payment",select_pay);
         myRef = database.getReference("Jobs");
         myRef2=database.getReference("Jobs");
-        //if (myRef.child(job)==null)
-            //Log.d("Acive Workers: ","None");
 
         myRef.child(job).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (!dataSnapshot.exists()) {
-                    Log.d("Active Workers", "None");
-                    worklist = findViewById(R.id.textView7);
-                    worklist.setText("");
-                    worklist = findViewById(R.id.textView6);
-                    worklist.setText("Active Workers: None");
-                }
-                else{
+                if (dataSnapshot.exists()){
                     int no = 0;
                     activeEmployess.clear();
                     //Log.d("here1",".............");
@@ -116,9 +111,7 @@ public class Result extends AppCompatActivity  {
                         //details += "Location: " + postSnapshot.child("Loc").getValue().toString() + " Username" + postSnapshot.child("User").getValue().toString() + "\n";
                         Employee e = postSnapshot.getValue(Employee.class);
                         activeEmployess.add(e);
-
                         //Log.d("trial3",((Employee)activeEmployess.get(0)).getUsername());
-
                         //Log.d("trial2",Integer.toString(activeEmployess.size()));
                     }
                     Log.d("Loc Kitti", loc);
@@ -192,12 +185,7 @@ public class Result extends AppCompatActivity  {
                                                     //
                                                 }
                                             });
-                                            /*
-                                            myRef1.child(number+"").child("Worker_User").setValue(uname);
-                                            myRef1.child(number+"").child("Customer_Name").setValue(cusname);
-                                            myRef1.child(number+"").child("Customer_Contact").setValue(cusnum);
-                                            myRef1.child(number+"").child("Customer_Location").setValue(places_loc[customer_loc][0]);
-                                            */
+
                                         }
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {
@@ -224,39 +212,9 @@ public class Result extends AppCompatActivity  {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        /*myRef1 = database.getReference("Assigned");
-        myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(uid)) {
-                    finish();
-                    Intent intent = new Intent(Result.this, Subject.class);
-                    startActivity(intent);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
         finish();
         Intent intent = new Intent(Result.this, Subject.class);
         startActivity(intent);
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("Result Code of payment:",Integer.toString(requestCode));
-        Log.d("Google Code of payment:",Integer.toString(GOOGLE_PAY_REQUEST_CODE));
-        if (requestCode == GOOGLE_PAY_REQUEST_CODE) {
-            // Process based on the data in response.
-            String status=data.getStringExtra("Status");
-            Log.d("result of google pay",status );
-            Toast.makeText(Result.this, status, Toast.LENGTH_SHORT).show();
-            //Toast paystatus = Toast.makeText(getApplicationContext(),status,Toast.LENGTH_SHORT);
-            finish();
-            Intent intent = new Intent(Result.this, Subject.class);
-            startActivity(intent);
-        }
-    }
+
 }

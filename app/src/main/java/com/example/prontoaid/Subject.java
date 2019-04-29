@@ -3,8 +3,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -34,29 +36,30 @@ import java.util.List;
 public class Subject extends AppCompatActivity implements View.OnClickListener {
     Button btnDatePicker, btnTimePicker, btnsearch, btnPayNow;
     EditText txtDate, txtTime;
-    String job,loc,name,phone;
+    String job,loc;
     private int mYear, mMonth, mDay, mHour, mMinute;
-    //int amount_job;
+    Intent intent ;
+    int amount;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Assigned");
     TextView job_amount;
-    //RadioGroup check_pay;
-    //check_pay = (RadioGroup) findViewById(R.id.radioGroup);
-    //int GOOGLE_PAY_REQUEST_CODE = 123;
+    RadioGroup check_pay;
+    String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user",select_pay;
+    int GOOGLE_PAY_REQUEST_CODE = 123;
+    DatabaseReference myRef1 = database.getReference("Jobs");
 
-    //    Button radioButton = findViewById(R.id.radioButton);
     public void onRadioButtonClicked(View view) {
-        // Is the button now checked?
+
         boolean checked = ((RadioButton) view).isChecked();
 
 
         // Check which radio button was clicked
         switch (view.getId()) {
             case R.id.radioButton:
-                Button btn_date = (Button) this.findViewById(R.id.btn_date);
-                Button btn_time = (Button) this.findViewById(R.id.btn_time);
-                TextView in_date = (TextView) this.findViewById(R.id.in_date);
-                TextView in_time = (TextView) this.findViewById(R.id.in_time);
+                Button btn_date = this.findViewById(R.id.btn_date);
+                Button btn_time = this.findViewById(R.id.btn_time);
+                TextView in_date = this.findViewById(R.id.in_date);
+                TextView in_time = this.findViewById(R.id.in_time);
                 if (checked) {
 
                     btn_date.setVisibility(View.GONE);
@@ -88,7 +91,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subject);
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        check_pay = findViewById(R.id.payCheck);
+        Spinner spinner = findViewById(R.id.spinner);
         final List<String> categories = new ArrayList<String>();
         categories.add("Plumber");
         categories.add("Electrician");
@@ -215,12 +219,74 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         }
         if (v == btnsearch){
 
+            select_pay= ((RadioButton)findViewById(check_pay.getCheckedRadioButtonId())).getText().toString();
+            SharedPreferences sp = getSharedPreferences("logindata" , Context.MODE_PRIVATE);
+            sp.edit().putString("for_loc",loc).commit();
+            sp.edit().putString("for_job",job).commit();
+            sp.edit().putString("for_pay",select_pay).commit();
 
-            Intent intent = new Intent(Subject.this, Result.class);
-            intent.putExtra("for_job",job);
-            intent.putExtra("for_loc",loc);
-            startActivity(intent);
-            finish();
+            myRef1.child(job).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            DatabaseReference refloc=database.getReference("UpdateLocation");
+                            refloc.setValue("1");
+                            if (select_pay.equals("Google Pay")){
+                                Toast.makeText(Subject.this, "Pay now", Toast.LENGTH_SHORT).show();
+                                //Toast paynow = Toast.makeText(getApplicationContext(),"Pay now-",Toast.LENGTH_SHORT);
+                                //paynow.show();
+                                switch (job) {
+                                    case "Carpenter":
+                                        amount=250;
+                                        break;
+                                    case "Plumber":
+                                        amount=300;
+                                        break;
+                                    case "Electrician":
+                                        amount=350;
+                                        break;
+                                    case "House Cleaner":
+                                        amount=300;
+                                        break;
+                                    default:
+                                        break;
+
+                                    }
+
+                                Uri uri = new Uri.Builder()
+                                        .scheme("upi")
+                                        .authority("pay")
+                                        .appendQueryParameter("pa", "shaunritty-1@okicici")
+                                        .appendQueryParameter("pn", "Shaun Ritty")
+                                        .appendQueryParameter("mc", "1234")
+                                        .appendQueryParameter("tr", "983638Pronto")
+                                        .appendQueryParameter("tn", "Service Payment")
+                                        .appendQueryParameter("am", amount+"")
+                                        .appendQueryParameter("cu", "INR")
+                                        .appendQueryParameter("url", "www.google.com")
+                                        .build();
+                                intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(uri);
+                                intent.setPackage(GOOGLE_PAY_PACKAGE_NAME);
+                                startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
+                                }
+                            else{
+                                finish();
+                                intent = new Intent(Subject.this, Result.class);
+                                startActivity(intent);
+                            }
+                        }
+                        else{
+                            Toast.makeText(Subject.this, "No Available Workers", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
         }
 
     }
@@ -228,13 +294,29 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         finish();
         Intent intent = new Intent(Subject.this, login.class);
         startActivity(intent);
     }
 
-}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String status=data.getStringExtra("Status");
+        Log.d("Result Code of payment:",Integer.toString(requestCode));
+        Log.d("Google Code of payment:",Integer.toString(GOOGLE_PAY_REQUEST_CODE));
+        Toast.makeText(Subject.this, status, Toast.LENGTH_SHORT).show();
+        if (status.equals("SUCCESS")){
+            finish();
+            Intent intent = new Intent(Subject.this, Result.class);
+            startActivity(intent);
+            }
+
+        }
+
+    }
+
+
 
 
 

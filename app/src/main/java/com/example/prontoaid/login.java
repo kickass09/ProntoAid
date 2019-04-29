@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +31,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class login extends AppCompatActivity {
     Button r,l;
     EditText iemail,ipassword;
@@ -36,16 +40,23 @@ public class login extends AppCompatActivity {
     private TextView ForgotPassword;
     int flag=0,number;
     ProgressDialog progressDialog;
+    Double latitude,longitude;
 
+    public LocationManager mLocationManager = null;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("Customer");
         FirebaseApp.initializeApp(this);
+        locationListenSet();
+        progressDialog = new ProgressDialog(this);
+
         Auth = FirebaseAuth.getInstance();
         setContentView(R.layout.login);
         iemail = (EditText) findViewById(R.id.editText);
+
         ipassword = (EditText) findViewById(R.id.editText2);
         Auth = FirebaseAuth.getInstance();
         ForgotPassword = (TextView)findViewById(R.id.tvForgotPassword);
@@ -54,7 +65,7 @@ public class login extends AppCompatActivity {
     public void addListenerOnButton() {
         flag=0;
         final Context context= this;
-        progressDialog = new ProgressDialog(this);
+
         r= (Button) findViewById(R.id.button);
         l= (Button) findViewById(R.id.button2);
         l.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +118,7 @@ public class login extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             flag = 1;
                                             progressDialog.dismiss();
+
                                             //Disconnection
                                             //myRef.child(n+"").child("Available").setValue("Online");
                                             //myRef.child(n+"").child("Available").onDisconnect().setValue("Disconnected");
@@ -114,6 +126,12 @@ public class login extends AppCompatActivity {
                                             SharedPreferences sp = getSharedPreferences("logindata" , Context.MODE_PRIVATE);
                                             sp.edit().putString("name",name).commit();
                                             sp.edit().putString("phone",phone).commit();
+                                            Log.d("Post Key",postSnapshot.getKey());
+
+                                            myRef.child(postSnapshot.getKey()).child("Latitude").setValue(latitude+"");
+                                            myRef.child(postSnapshot.getKey()).child("Longitude").setValue(longitude+"");
+                                            float dist=calculateDistance(latitude,longitude,10.001944, 76.350272);
+                                            Log.i("Distance",dist+"");
 
 
                                             Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
@@ -147,5 +165,104 @@ public class login extends AppCompatActivity {
                 startActivity(new Intent(login.this, PasswordActivity.class));
             }
         });
-    }}
+
+
+    }
+
+
+    void locationListenSet()
+    {
+        initializeLocationManager();
+        LocationListener[] mLocationListeners = new login.LocationListener[]{
+
+                new login.LocationListener(LocationManager.GPS_PROVIDER),
+                new LocationListener(LocationManager.NETWORK_PROVIDER)
+        };
+        try {
+            mLocationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER, 100, 10f,
+                    mLocationListeners[1]);
+        } catch (java.lang.SecurityException ex) {
+            Log.e(TAG, "fail to request location update, ignore", ex);
+        } catch (IllegalArgumentException ex) {
+            Log.e(TAG, "network provider does not exist, " + ex.getMessage());
+        }
+        try {
+            mLocationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,100, 10f,
+                    mLocationListeners[0]);
+        } catch (java.lang.SecurityException ex) {
+            Log.e(TAG, "fail to request location update, ignore", ex);
+        } catch (IllegalArgumentException ex) {
+            Log.e(TAG, "gps provider does not exist " + ex.getMessage());
+        }
+
+    }
+
+    private void initializeLocationManager() {
+        Log.e(TAG, "initializeLocationManager");
+        if (mLocationManager == null) {
+            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        }
+    }
+
+    public final static double AVERAGE_RADIUS_OF_EARTH = 6371;
+    public int calculateDistance(double userLat, double userLng, double venueLat, double venueLng) {
+
+        double latDistance = Math.toRadians(userLat - venueLat);
+        double lngDistance = Math.toRadians(userLng - venueLng);
+
+        double a = (Math.sin(latDistance / 2) * Math.sin(latDistance / 2)) +
+                (Math.cos(Math.toRadians(userLat))) *
+                        (Math.cos(Math.toRadians(venueLat))) *
+                        (Math.sin(lngDistance / 2)) *
+                        (Math.sin(lngDistance / 2));
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return (int) (Math.round(AVERAGE_RADIUS_OF_EARTH * c));
+
+    }
+
+    public class LocationListener implements android.location.LocationListener {
+        public Location mLastLocation;
+        int i = 0;
+
+        public LocationListener(String provider) {
+            Log.e(TAG, "LocationListener " + provider);
+            mLastLocation = new Location(provider);
+
+        }
+
+        @Override
+        public void onLocationChanged(Location location)
+        {
+
+
+            latitude=location.getLatitude();
+            longitude=location.getLongitude();
+
+
+        }
+
+
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            Log.e(TAG, "onProviderDisabled: " + provider);
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            Log.e(TAG, "onProviderEnabled: " + provider);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.e(TAG, "onStatusChanged: " + provider);
+        }
+
+
+    }
+}
 

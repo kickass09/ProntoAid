@@ -8,16 +8,17 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="127dp"
-        android:layout_height="34dp"
+        android:layout_width="155dp"
+        android:layout_height="44dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/Welcome"
+        android:gravity="center_horizontal"
+        android:text="Welcome"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.002" />
+        app:layout_constraintVertical_bias="0.023" />
 
     <Spinner
         android:id="@+id/spinner"
@@ -47,10 +48,10 @@
         android:text="Book Now"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.971" />
 
     <TextView
         android:id="@+id/textView4"
@@ -154,7 +155,7 @@
         app:layout_constraintVertical_bias="0.65" />
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/bookMethod"
         android:layout_width="335dp"
         android:layout_height="96dp"
         android:layout_marginStart="36dp"
@@ -175,9 +176,9 @@
             android:layout_width="138dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="onRadioButtonClicked"
             android:checked="true"
-            android:text="@string/ASAP" />
+            android:onClick="onRadioButtonClicked"
+            android:text="Hire now" />
 
         <RadioButton
             android:id="@+id/radioButton2"
@@ -185,7 +186,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onRadioButtonClicked"
-            android:text="@string/SCHEDULE" />
+            android:text="Schedule for later" />
     </RadioGroup>
 
     <TextView
@@ -240,6 +241,7 @@
         app:layout_constraintVertical_bias="0.19" />
 
     <RadioGroup
+        android:id="@+id/payCheck"
         android:layout_width="238dp"
         android:layout_height="88dp"
         android:layout_marginStart="8dp"
