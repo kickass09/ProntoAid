@@ -67,7 +67,7 @@ public class Result extends AppCompatActivity  {
                 refloc=database.getReference("UpdateLocation");
                 refloc.setValue("0");
                 finish();
-                Intent intent = new Intent(Result.this, Subject.class);
+                Intent intent = new Intent(Result.this, Review.class);
                 startActivity(intent);
 
             }
