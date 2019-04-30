@@ -1,12 +1,15 @@
 package com.example.prontoaid;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -47,6 +50,7 @@ public class login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        askPermission();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("Customer");
         FirebaseApp.initializeApp(this);
@@ -263,6 +267,34 @@ public class login extends AppCompatActivity {
         }
 
 
+
     }
+    void askPermission()
+    {
+        try {
+            if (ActivityCompat.checkSelfPermission(login.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {//Checking permission
+
+
+            } else {
+
+                ActivityCompat.requestPermissions(login.this, new String[] {android.Manifest.permission.ACCESS_FINE_LOCATION},99);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Toast.makeText(this,"Permission Granted",Toast.LENGTH_LONG).show();
+
+    }
+
 }
 

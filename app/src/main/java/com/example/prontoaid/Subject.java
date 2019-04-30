@@ -277,7 +277,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                             }
                         }
                         else{
-                            Toast.makeText(Subject.this, "No Available Workers", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Subject.this, "No available workers, try again later", Toast.LENGTH_SHORT).show();
                         }
                     }
 
