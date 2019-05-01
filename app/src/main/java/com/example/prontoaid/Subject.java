@@ -229,8 +229,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
-                            DatabaseReference refloc=database.getReference("UpdateLocation");
-                            refloc.setValue("1");
+                            //DatabaseReference refloc=database.getReference("UpdateLocation");
+                            //refloc.setValue("1");
                             if (select_pay.equals("Google Pay")){
                                 Toast.makeText(Subject.this, "Pay now", Toast.LENGTH_SHORT).show();
                                 //Toast paynow = Toast.makeText(getApplicationContext(),"Pay now-",Toast.LENGTH_SHORT);

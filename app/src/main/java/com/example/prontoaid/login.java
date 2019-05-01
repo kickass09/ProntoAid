@@ -51,12 +51,17 @@ public class login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         askPermission();
+
+
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("Customer");
         FirebaseApp.initializeApp(this);
-        locationListenSet();
-        progressDialog = new ProgressDialog(this);
 
+        progressDialog = new ProgressDialog(this);
+        locationListenSet();
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
         Auth = FirebaseAuth.getInstance();
         setContentView(R.layout.login);
         iemail = (EditText) findViewById(R.id.editText);
@@ -93,8 +98,8 @@ public class login extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                progressDialog.setMessage("Loading");
-                progressDialog.show();
+
+
                 Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(login.this, new OnCompleteListener<AuthResult>(){
                     public void onComplete(@NonNull final Task<AuthResult> task) {
 
@@ -121,7 +126,7 @@ public class login extends AppCompatActivity {
                                         //Log.i("Test4",flag+"");
                                         if (task.isSuccessful()) {
                                             flag = 1;
-                                            progressDialog.dismiss();
+                                            //progressDialog.dismiss();
 
                                             //Disconnection
                                             //myRef.child(n+"").child("Available").setValue("Online");
@@ -130,12 +135,14 @@ public class login extends AppCompatActivity {
                                             SharedPreferences sp = getSharedPreferences("logindata" , Context.MODE_PRIVATE);
                                             sp.edit().putString("name",name).commit();
                                             sp.edit().putString("phone",phone).commit();
-                                            Log.d("Post Key",postSnapshot.getKey());
-
-                                            myRef.child(postSnapshot.getKey()).child("Latitude").setValue(latitude+"");
-                                            myRef.child(postSnapshot.getKey()).child("Longitude").setValue(longitude+"");
-                                            float dist=calculateDistance(latitude,longitude,10.001944, 76.350272);
-                                            Log.i("Distance",dist+"");
+                                            sp.edit().putString("latitude",latitude+"").commit();
+                                            sp.edit().putString("longitude",longitude+"").commit();
+                                            //Log.d("Post Key",postSnapshot.getKey());
+                                            //locationListenSet();
+                                            myRef.child(postSnapshot.getKey()).child("Loc_Latitude").setValue(latitude+"");
+                                            myRef.child(postSnapshot.getKey()).child("Loc_Longitude").setValue(longitude+"");
+                                            //float dist=calculateDistance(latitude,longitude,10.001944, 76.350272);
+                                            //Log.i("Distance",dist+"");
 
 
                                             Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
@@ -210,23 +217,6 @@ public class login extends AppCompatActivity {
         }
     }
 
-    public final static double AVERAGE_RADIUS_OF_EARTH = 6371;
-    public int calculateDistance(double userLat, double userLng, double venueLat, double venueLng) {
-
-        double latDistance = Math.toRadians(userLat - venueLat);
-        double lngDistance = Math.toRadians(userLng - venueLng);
-
-        double a = (Math.sin(latDistance / 2) * Math.sin(latDistance / 2)) +
-                (Math.cos(Math.toRadians(userLat))) *
-                        (Math.cos(Math.toRadians(venueLat))) *
-                        (Math.sin(lngDistance / 2)) *
-                        (Math.sin(lngDistance / 2));
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return (int) (Math.round(AVERAGE_RADIUS_OF_EARTH * c));
-
-    }
 
     public class LocationListener implements android.location.LocationListener {
         public Location mLastLocation;
@@ -245,8 +235,10 @@ public class login extends AppCompatActivity {
 
             latitude=location.getLatitude();
             longitude=location.getLongitude();
-
-
+            progressDialog.dismiss();
+            //Log.i("Latitude",latitude+"");
+            //Log.i("Longitude",longitude+"");
+            //progressDialog.dismiss();
         }
 
 
