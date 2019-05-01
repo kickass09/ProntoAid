@@ -36,16 +36,15 @@
     </LinearLayout>
 
 
-
     <Button
         android:id="@+id/taskover"
         android:layout_width="206dp"
         android:layout_height="68dp"
-        android:onClick="task_complete"
-        android:text="Task Completed"
-        android:visibility="invisible"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
-        android:textSize="18sp" />
+        android:onClick="task_complete"
+        android:text="Task Complete"
+        android:textSize="18sp"
+        android:visibility="invisible" />
 </RelativeLayout>

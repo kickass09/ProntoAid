@@ -1,10 +1,15 @@
 package com.example.prontoaid;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -29,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class login extends AppCompatActivity {
     Button r,l;
     EditText iemail,ipassword;
@@ -36,16 +43,29 @@ public class login extends AppCompatActivity {
     private TextView ForgotPassword;
     int flag=0,number;
     ProgressDialog progressDialog;
+    Double latitude,longitude;
 
+    public LocationManager mLocationManager = null;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        askPermission();
+
+
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("Customer");
         FirebaseApp.initializeApp(this);
+
+        progressDialog = new ProgressDialog(this);
+        locationListenSet();
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
         Auth = FirebaseAuth.getInstance();
         setContentView(R.layout.login);
         iemail = (EditText) findViewById(R.id.editText);
+
         ipassword = (EditText) findViewById(R.id.editText2);
         Auth = FirebaseAuth.getInstance();
         ForgotPassword = (TextView)findViewById(R.id.tvForgotPassword);
@@ -54,7 +74,7 @@ public class login extends AppCompatActivity {
     public void addListenerOnButton() {
         flag=0;
         final Context context= this;
-        progressDialog = new ProgressDialog(this);
+
         r= (Button) findViewById(R.id.button);
         l= (Button) findViewById(R.id.button2);
         l.setOnClickListener(new View.OnClickListener() {
@@ -78,8 +98,8 @@ public class login extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                progressDialog.setMessage("Loading");
-                progressDialog.show();
+
+
                 Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(login.this, new OnCompleteListener<AuthResult>(){
                     public void onComplete(@NonNull final Task<AuthResult> task) {
 
@@ -106,7 +126,8 @@ public class login extends AppCompatActivity {
                                         //Log.i("Test4",flag+"");
                                         if (task.isSuccessful()) {
                                             flag = 1;
-                                            progressDialog.dismiss();
+                                            //progressDialog.dismiss();
+
                                             //Disconnection
                                             //myRef.child(n+"").child("Available").setValue("Online");
                                             //myRef.child(n+"").child("Available").onDisconnect().setValue("Disconnected");
@@ -114,6 +135,14 @@ public class login extends AppCompatActivity {
                                             SharedPreferences sp = getSharedPreferences("logindata" , Context.MODE_PRIVATE);
                                             sp.edit().putString("name",name).commit();
                                             sp.edit().putString("phone",phone).commit();
+                                            sp.edit().putString("latitude",latitude+"").commit();
+                                            sp.edit().putString("longitude",longitude+"").commit();
+                                            //Log.d("Post Key",postSnapshot.getKey());
+                                            //locationListenSet();
+                                            myRef.child(postSnapshot.getKey()).child("Loc_Latitude").setValue(latitude+"");
+                                            myRef.child(postSnapshot.getKey()).child("Loc_Longitude").setValue(longitude+"");
+                                            //float dist=calculateDistance(latitude,longitude,10.001944, 76.350272);
+                                            //Log.i("Distance",dist+"");
 
 
                                             Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
@@ -147,5 +176,117 @@ public class login extends AppCompatActivity {
                 startActivity(new Intent(login.this, PasswordActivity.class));
             }
         });
-    }}
+
+
+    }
+
+
+    void locationListenSet()
+    {
+        initializeLocationManager();
+        LocationListener[] mLocationListeners = new login.LocationListener[]{
+
+                new login.LocationListener(LocationManager.GPS_PROVIDER),
+                new LocationListener(LocationManager.NETWORK_PROVIDER)
+        };
+        try {
+            mLocationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER, 100, 10f,
+                    mLocationListeners[1]);
+        } catch (java.lang.SecurityException ex) {
+            Log.e(TAG, "fail to request location update, ignore", ex);
+        } catch (IllegalArgumentException ex) {
+            Log.e(TAG, "network provider does not exist, " + ex.getMessage());
+        }
+        try {
+            mLocationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,100, 10f,
+                    mLocationListeners[0]);
+        } catch (java.lang.SecurityException ex) {
+            Log.e(TAG, "fail to request location update, ignore", ex);
+        } catch (IllegalArgumentException ex) {
+            Log.e(TAG, "gps provider does not exist " + ex.getMessage());
+        }
+
+    }
+
+    private void initializeLocationManager() {
+        Log.e(TAG, "initializeLocationManager");
+        if (mLocationManager == null) {
+            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        }
+    }
+
+
+    public class LocationListener implements android.location.LocationListener {
+        public Location mLastLocation;
+        int i = 0;
+
+        public LocationListener(String provider) {
+            Log.e(TAG, "LocationListener " + provider);
+            mLastLocation = new Location(provider);
+
+        }
+
+        @Override
+        public void onLocationChanged(Location location)
+        {
+
+
+            latitude=location.getLatitude();
+            longitude=location.getLongitude();
+            progressDialog.dismiss();
+            //Log.i("Latitude",latitude+"");
+            //Log.i("Longitude",longitude+"");
+            //progressDialog.dismiss();
+        }
+
+
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            Log.e(TAG, "onProviderDisabled: " + provider);
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            Log.e(TAG, "onProviderEnabled: " + provider);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.e(TAG, "onStatusChanged: " + provider);
+        }
+
+
+
+    }
+    void askPermission()
+    {
+        try {
+            if (ActivityCompat.checkSelfPermission(login.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {//Checking permission
+
+
+            } else {
+
+                ActivityCompat.requestPermissions(login.this, new String[] {android.Manifest.permission.ACCESS_FINE_LOCATION},99);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Toast.makeText(this,"Permission Granted",Toast.LENGTH_LONG).show();
+
+    }
+
+}
 
