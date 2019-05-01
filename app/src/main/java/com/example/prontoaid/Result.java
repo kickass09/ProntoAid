@@ -115,7 +115,7 @@ public class Result extends AppCompatActivity  {
                         //Log.d("Active Worker " + no, postSnapshot.getValue().toString());
                         //details += "Location: " + postSnapshot.child("Loc").getValue().toString() + " Username" + postSnapshot.child("User").getValue().toString() + "\n";
                         Log.d("Post Test",((Employee)postSnapshot.getValue()).toString());
-                        Employee e = (Employee)postSnapshot.getValue();
+                        Employee e = postSnapshot.getValue(Employee.class);
                         activeEmployess.add(e);
                         //Log.d("trial3",((Employee)activeEmployess.get(0)).getUsername());
                         //Log.d("trial2",Integer.toString(activeEmployess.size()));
