@@ -32,6 +32,8 @@ public class Result extends AppCompatActivity  {
     TextView worklist;
     Button taskover;
     int empno,amount;
+    Map emp;
+    //Employee e;
     //String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user",select_pay;
 
     public void task_complete(View view){
@@ -43,7 +45,17 @@ public class Result extends AppCompatActivity  {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 myRef1.child(uid).removeValue();
-                myRef2.child(job).child(tid).setValue(activeEmployess.get(empno));
+                Employee ideal=(Employee)activeEmployess.get(empno);
+                //Log.d("Test List Username",d.getUsername());
+                Map data = new HashMap();
+                data.put("User", ideal.getUsername());
+                data.put("Loc", ideal.getLocation());
+                data.put("Emp_Name", ideal.getName());
+                data.put("Phone_Number", ideal.getContact());
+                data.put("Loclatitude",ideal.getLoclatitude());
+                data.put("Loclongitude",ideal.getLoclongitude());
+
+                myRef2.child(job).child(tid).setValue(data);
                 if (select_pay.equals("Cash on completion")) {
                     switch (job) {
                         case "Carpenter":
@@ -114,17 +126,23 @@ public class Result extends AppCompatActivity  {
                         //Log.d("here2",".............");
                         //Log.d("Active Worker " + no, postSnapshot.getValue().toString());
                         //details += "Location: " + postSnapshot.child("Loc").getValue().toString() + " Username" + postSnapshot.child("User").getValue().toString() + "\n";
-                        Log.d("Post Test",((Employee)postSnapshot.getValue()).toString());
-                        Employee e = postSnapshot.getValue(Employee.class);
+                        //Log.d("Post Test",((Employee)postSnapshot.getValue()).toString());
+                        emp=(Map)postSnapshot.getValue();
+                        Log.d("Post Test",emp.toString());
+                        Employee e=new Employee(emp.get("Loc").toString(),emp.get("User").toString(),emp.get("Phone_Number").toString(),emp.get("Emp_Name").toString(),emp.get("Loclatitude").toString(),emp.get("Loclongitude").toString());
+                        //emp.get("Loc"),emp.get("User"),emp.get("Phone_Number"),emp.get("Emp_Name")
+                        //Log.d("Testing Class",e.toString());
                         activeEmployess.add(e);
                         //Log.d("trial3",((Employee)activeEmployess.get(0)).getUsername());
                         //Log.d("trial2",Integer.toString(activeEmployess.size()));
                     }
-
+                    Log.d("Active Employees",activeEmployess.toString());
                     best_distance=100;
                     for (int i = 0; i < activeEmployess.size(); i++) {
                         //loc = ((Employee) activeEmployess.get(i)).getLocation();
 
+                        //lat2=76.3707827;
+                        //lon2=10.0037787;
                         lat2=Double.parseDouble(((Employee) activeEmployess.get(i)).getLoclatitude());
                         lon2=Double.parseDouble(((Employee) activeEmployess.get(i)).getLoclongitude());
 
@@ -151,7 +169,8 @@ public class Result extends AppCompatActivity  {
                                     data.put("Worker_User", uname);
                                     data.put("Customer_Name", cusname);
                                     data.put("Customer_Contact", cusnum);
-                                    data.put("Customer_Location", places_loc[customer_loc][0]);
+                                    data.put("Customer_Latitude",lat1+"");
+                                    data.put("Customer_Longitude",lon1+"");
                                     myRef1.child(uid).setValue(data);
                                     Log.d("User Worker again", uname);
                                     myRef=myRef.child(job);
@@ -288,7 +307,7 @@ public class Result extends AppCompatActivity  {
         startActivity(intent);
     }
 
-    public final static double AVERAGE_RADIUS_OF_EARTH = 6371;
+    public final static double AVERAGE_RADIUS_OF_EARTH = 6371000;
     public int calculateDistance(double userLat, double userLng, double venueLat, double venueLng) {
 
         double latDistance = Math.toRadians(userLat - venueLat);
