@@ -26,5 +26,6 @@
     <string name="forgot_password">forgot password?</string>
     <string name="reset_password">reset password</string>
     <string name="location">Location :</string>
+    <string name="title_activity_scheduler">scheduler</string>
 
 </resources>

@@ -43,7 +43,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Assigned");
     TextView job_amount;
-    RadioGroup check_pay;
+    RadioGroup check_pay,bookmethod;
     String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user",select_pay;
     int GOOGLE_PAY_REQUEST_CODE = 123;
     DatabaseReference myRef1 = database.getReference("Jobs");
@@ -61,7 +61,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                 TextView in_date = this.findViewById(R.id.in_date);
                 TextView in_time = this.findViewById(R.id.in_time);
                 if (checked) {
-
+                    btnsearch.setText("Book Now");
                     btn_date.setVisibility(View.GONE);
 
                     btn_time.setVisibility(View.GONE);
@@ -74,6 +74,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             case R.id.radioButton2:
 
                 if (checked) {
+                    btnsearch.setText("Book Now");
                     Button btn_date1 = (Button) this.findViewById(R.id.btn_date);
                     btn_date1.setVisibility(View.VISIBLE);
                     Button btn_time1 = (Button) this.findViewById(R.id.btn_time);
@@ -83,6 +84,12 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                     TextView in_time1 = (TextView) this.findViewById(R.id.in_time);
                     in_time1.setVisibility(View.VISIBLE);
                     break;
+
+                }
+            case R.id.radioButton3:
+                if (checked) {
+                   btnsearch.setText("View pending Jobs");
+                   break;
                 }
         }
     }
@@ -92,6 +99,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subject);
         check_pay = findViewById(R.id.payCheck);
+        bookmethod = findViewById(R.id.bookMethod);
         Spinner spinner = findViewById(R.id.spinner);
         final List<String> categories = new ArrayList<String>();
         categories.add("Plumber");
@@ -219,6 +227,12 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         }
         if (v == btnsearch){
 
+            // Check for scheduler
+            final String checkviewpending = ((RadioButton)findViewById(bookmethod.getCheckedRadioButtonId())).getText().toString();
+            if (checkviewpending.equalsIgnoreCase("View Pending Requests")){
+                Intent intent = new Intent(this, scheduler.class);
+                startActivity(intent);
+            }
             select_pay= ((RadioButton)findViewById(check_pay.getCheckedRadioButtonId())).getText().toString();
             SharedPreferences sp = getSharedPreferences("logindata" , Context.MODE_PRIVATE);
             sp.edit().putString("for_loc",loc).commit();
@@ -277,7 +291,10 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                             }
                         }
                         else{
-                            Toast.makeText(Subject.this, "No available workers, try again later", Toast.LENGTH_SHORT).show();
+                            if (!checkviewpending.equalsIgnoreCase("View Pending Requests")){
+                                Toast.makeText(Subject.this, "No available workers, try again later", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     }
 
