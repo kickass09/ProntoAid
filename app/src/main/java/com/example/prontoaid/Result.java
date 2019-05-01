@@ -95,11 +95,11 @@ public class Result extends AppCompatActivity  {
         setContentView(R.layout.activity_result);
         final SharedPreferences sp = getSharedPreferences("logindata" , MODE_PRIVATE);
         taskover = findViewById(R.id.taskover);
-        double d1,d2;
-        d1=calculateDistance(9.9932711,76.3582368,9.9931892,76.3581765);
-        d2=calculateDistance(9.9931892,76.3581765,9.9923511 ,76.3583902);
-        Log.d("Distance   Ashish ",d1+"");
-        Log.d("Distance  Nathaniel ",d2+"");
+        //double d1,d2;
+        //d1=calculateDistance(9.9932711,76.3582368,9.9931892,76.3581765);
+        //d2=calculateDistance(9.9931892,76.3581765,9.9923511 ,76.3583902);
+        //Log.d("Distance   Ashish ",d1+"");
+        //Log.d("Distance  Nathaniel ",d2+"");
         job = sp.getString("for_job","null");
         lat1=Double.parseDouble(sp.getString("latitude","null"));
         lon1=Double.parseDouble(sp.getString("longitude","null"));
@@ -117,30 +117,27 @@ public class Result extends AppCompatActivity  {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.exists()){
-                    //int no = 0;
+
+                    //Log.d("Assigning","1");
                     activeEmployess.clear();
-                    //Log.d("here1",".............");
+
                     String details = "";
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        //no++;
-                        //Log.d("here2",".............");
-                        //Log.d("Active Worker " + no, postSnapshot.getValue().toString());
-                        //details += "Location: " + postSnapshot.child("Loc").getValue().toString() + " Username" + postSnapshot.child("User").getValue().toString() + "\n";
-                        //Log.d("Post Test",((Employee)postSnapshot.getValue()).toString());
+
                         emp=(Map)postSnapshot.getValue();
                         Log.d("Post Test",emp.toString());
                         Employee e=new Employee(emp.get("Loc").toString(),emp.get("User").toString(),emp.get("Phone_Number").toString(),emp.get("Emp_Name").toString(),emp.get("Loclatitude").toString(),emp.get("Loclongitude").toString());
-                        //emp.get("Loc"),emp.get("User"),emp.get("Phone_Number"),emp.get("Emp_Name")
-                        //Log.d("Testing Class",e.toString());
                         activeEmployess.add(e);
-                        //Log.d("trial3",((Employee)activeEmployess.get(0)).getUsername());
-                        //Log.d("trial2",Integer.toString(activeEmployess.size()));
-                    }
-                    Log.d("Active Employees",activeEmployess.toString());
-                    best_distance=100;
+
+                        }
+
+                    lat2=Double.parseDouble(((Employee) activeEmployess.get(0)).getLoclatitude());
+                    lon2=Double.parseDouble(((Employee) activeEmployess.get(0)).getLoclongitude());
+                    best_distance=calculateDistance(lat1,lon1,lat2,lon2);
+                    //Log.d("Assigning","2");
+
                     for (int i = 0; i < activeEmployess.size(); i++) {
                         //loc = ((Employee) activeEmployess.get(i)).getLocation();
-
                         //lat2=76.3707827;
                         //lon2=10.0037787;
                         lat2=Double.parseDouble(((Employee) activeEmployess.get(i)).getLoclatitude());
@@ -148,7 +145,8 @@ public class Result extends AppCompatActivity  {
 
                         distance=calculateDistance(lat1,lon1,lat2,lon2);
 
-                        if (best_distance>distance){
+                        if (best_distance>=distance){
+                            //Log.d("Assigning","3");
                             best_distance=distance;
                             uname=((Employee) activeEmployess.get(i)).getUsername();
                             name=((Employee) activeEmployess.get(i)).getName();
