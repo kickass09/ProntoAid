@@ -312,7 +312,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-        Intent intent = new Intent(Subject.this, login.class);
+        Intent intent = new Intent(Subject.this,WelcomeActivity.class);
         startActivity(intent);
     }
 
