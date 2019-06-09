@@ -15,9 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
+            android:name=".WelcomeActivity"
+            android:label="@string/title_activity_welcome"
+            android:theme="@style/NoActionBar"></activity>
+        <activity
             android:name=".scheduler"
             android:label="@string/title_activity_scheduler"
-            android:theme="@style/NoActionBar"></activity>
+            android:theme="@style/NoActionBar" />
         <activity android:name=".Review" />
         <activity android:name=".Result" />
         <activity android:name=".PasswordActivity" />
