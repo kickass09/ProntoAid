@@ -58,10 +58,7 @@ public class login extends AppCompatActivity {
         final DatabaseReference myRef = database.getReference("Customer");
         FirebaseApp.initializeApp(this);
 
-        progressDialog = new ProgressDialog(this);
-        locationListenSet();
-        progressDialog.setMessage("Loading");
-        progressDialog.show();
+
         Auth = FirebaseAuth.getInstance();
         setContentView(R.layout.login);
         iemail = (EditText) findViewById(R.id.editText);
@@ -87,6 +84,8 @@ public class login extends AppCompatActivity {
         r.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.setMessage("Loading");
+                progressDialog.show();
                 final String email = iemail.getText().toString();
                 final String password = ipassword.getText().toString();
                 if (TextUtils.isEmpty(email)) {
@@ -126,7 +125,7 @@ public class login extends AppCompatActivity {
                                         //Log.i("Test4",flag+"");
                                         if (task.isSuccessful()) {
                                             flag = 1;
-                                            //progressDialog.dismiss();
+                                            progressDialog.dismiss();
 
                                             //Disconnection
                                             //myRef.child(n+"").child("Available").setValue("Online");
@@ -268,6 +267,10 @@ public class login extends AppCompatActivity {
             if (ActivityCompat.checkSelfPermission(login.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {//Checking permission
+                progressDialog = new ProgressDialog(this);
+                locationListenSet();
+                progressDialog.setMessage("Setting your location");
+                progressDialog.show();
 
 
             } else {
@@ -285,6 +288,10 @@ public class login extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        progressDialog = new ProgressDialog(this);
+        locationListenSet();
+        progressDialog.setMessage("Setting your location");
+        progressDialog.show();
         Toast.makeText(this,"Permission Granted",Toast.LENGTH_LONG).show();
 
     }

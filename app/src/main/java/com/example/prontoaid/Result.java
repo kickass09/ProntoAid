@@ -49,7 +49,6 @@ public class Result extends AppCompatActivity  {
                 //Log.d("Test List Username",d.getUsername());
                 Map data = new HashMap();
                 data.put("User", ideal.getUsername());
-                data.put("Loc", ideal.getLocation());
                 data.put("Emp_Name", ideal.getName());
                 data.put("Phone_Number", ideal.getContact());
                 data.put("Loclatitude",ideal.getLoclatitude());
@@ -126,7 +125,7 @@ public class Result extends AppCompatActivity  {
 
                         emp=(Map)postSnapshot.getValue();
                         Log.d("Post Test",emp.toString());
-                        Employee e=new Employee(emp.get("Loc").toString(),emp.get("User").toString(),emp.get("Phone_Number").toString(),emp.get("Emp_Name").toString(),emp.get("Loclatitude").toString(),emp.get("Loclongitude").toString());
+                        Employee e=new Employee(emp.get("User").toString(),emp.get("Phone_Number").toString(),emp.get("Emp_Name").toString(),emp.get("Loclatitude").toString(),emp.get("Loclongitude").toString());
                         activeEmployess.add(e);
 
                         }
@@ -161,7 +160,6 @@ public class Result extends AppCompatActivity  {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     cusname = sp.getString("name","null");
                                     cusnum =  sp.getString("phone","null");
-
                                     uid = myRef1.push().getKey();
                                     Map data = new HashMap();
                                     data.put("Worker_User", uname);
@@ -212,80 +210,7 @@ public class Result extends AppCompatActivity  {
 
 
                         }
-                        /*
-                        Log.d("Current Emp Loc:  ", places_loc[customer_loc][1] + " " + places_loc[customer_loc][2]);
-                        for (int j = 0; j < places_loc.length; j++) {
-                            if (loc.equals(places_loc[j][0])) {
-                                Log.d("Active Empls: ", places_loc[j][1] + " " + places_loc[j][2]);
-                                distance = Math.sqrt(Math.pow((Integer.parseInt(places_loc[j][1]) - Integer.parseInt(places_loc[customer_loc][1])), 2) + Math.pow((Integer.parseInt(places_loc[j][2]) - Integer.parseInt(places_loc[customer_loc][2])), 2));
-                                Log.d("Active Distance: ", distance + "");
-                                if (best_distance>distance){
-                                    best_distance=distance;
-                                    uname=((Employee) activeEmployess.get(i)).getUsername();
-                                    name=((Employee) activeEmployess.get(i)).getName();
-                                    phone=((Employee) activeEmployess.get(i)).getContact();
-                                    details=job+" "+name+" has been assigned to you\nContact: "+phone;
-                                    empno=i;
-                                    taskover.setVisibility(View.VISIBLE);
 
-                                    myRef1 = database.getReference("Assigned");
-                                    myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                            //myRef=myRef.getParent();
-                                            SharedPreferences sp = getSharedPreferences("logindata" , MODE_PRIVATE);
-                                            cusname = sp.getString("name","null");
-                                            cusnum =  sp.getString("phone","null");
-
-                                            uid = myRef1.push().getKey();
-                                            Map data = new HashMap();
-                                            data.put("Worker_User", uname);
-                                            data.put("Customer_Name", cusname);
-                                            data.put("Customer_Contact", cusnum);
-                                            data.put("Customer_Location", places_loc[customer_loc][0]);
-                                            myRef1.child(uid).setValue(data);
-                                            Log.d("User Worker again", uname);
-                                            myRef=myRef.child(job);
-                                            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                                        //String tid = postSnapshot.getKey();
-                                                        String username = postSnapshot.child("User").getValue(String.class);
-                                                        Log.d("Username tid", username);
-                                                        //activeEmployess.add(e);
-                                                        //Log.d("Users Again", e.getUsername());
-                                                        if (uname.equals(username)) {
-                                                            tid = postSnapshot.getKey();
-                                                            Log.d("Testing again", tid);
-                                                            myRef2.child(job).child(tid).removeValue();
-                                                        }
-                                                            //myRef.child(uid).removeValue();
-                                                        //Log.d("trial3",((Employee)activeEmployess.get(0)).getUsername());
-
-                                                        //Log.d("trial2",Integer.toString(activeEmployess.size()));
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                    //
-                                                }
-                                            });
-
-                                        }
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-                                        }
-                                    });
-
-
-                                    worklist = findViewById(R.id.textView7);
-                                    worklist.setText(details);
-                                }
-                            }
-                        }*/
                     }
                     //change here
                 }
