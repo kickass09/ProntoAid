@@ -86,11 +86,6 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                     break;
 
                 }
-            case R.id.radioButton3:
-                if (checked) {
-                   btnsearch.setText("View pending Jobs");
-                   break;
-                }
         }
     }
 
@@ -100,6 +95,11 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.subject);
         check_pay = findViewById(R.id.payCheck);
         bookmethod = findViewById(R.id.bookMethod);
+        // For reference
+        // checkedbuttonid = bookmethod.getCheckedRadioButtonId();
+        // scheduleforlatebutton = (RadioButton) findViewById(checkedbuttonid);
+        // String buttontext = scheduleforlatebutton.getText()
+        //
         Spinner spinner = findViewById(R.id.spinner);
         final List<String> categories = new ArrayList<String>();
         categories.add("Plumber");
