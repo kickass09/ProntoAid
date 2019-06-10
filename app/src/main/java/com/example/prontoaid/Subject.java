@@ -33,6 +33,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+//date
+import java.util.Date;
+
 
 public class Subject extends AppCompatActivity implements View.OnClickListener {
     Button btnDatePicker, btnTimePicker, btnsearch, btnPayNow;
@@ -308,14 +311,35 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                 });
             }
          else{
-                //Toast.makeText(Subject.this, "Hello Testing...", Toast.LENGTH_SHORT).show();
-                myRef=database.getReference("Requesting");
 
-                uid = myRef.push().getKey();
+               try{
+                   // https://www.mkyong.com/java/how-to-convert-string-to-date-java/
+                   // first convert date to date objecct
+                   // then send to validate function
+                   // if true send to database
+                   Date date = null;
+                   if (validateData(date)){
+                       //Toast.makeText(Subject.this, "Hello Testing...", Toast.LENGTH_SHORT).show();
+                       myRef=database.getReference("Requesting");
 
-                myRef.child(uid).child("Job").setValue(job);
-                myRef.child(uid).child("Date").setValue(txtDate.getText().toString());
-                myRef.child(uid).child("Time").setValue(txtTime.getText().toString());
+                       uid = myRef.push().getKey();
+
+                       myRef.child(uid).child("Job").setValue(job);
+                       //Convert String to date object using:
+
+                       // Avaiable format
+                       myRef.child(uid).child("Date").setValue(txtDate.getText().toString());
+                       myRef.child(uid).child("Time").setValue(txtTime.getText().toString());
+                   } else{
+                       //show toast
+                   }
+                   // else
+               }catch (Exception e){
+                   // Show toast that date is wrong
+
+               }
+
+
 
 
             }
@@ -345,6 +369,14 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             startActivity(intent);
             }
 
+        }
+
+        private boolean validateData(Date date) {
+
+         // write the logic here to validate for example less than 2 days
+         Boolean retval = true;
+
+         return retval;
         }
 
     }
