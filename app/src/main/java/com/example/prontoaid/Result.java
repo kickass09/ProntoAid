@@ -22,7 +22,7 @@ import java.util.Map;
 public class Result extends AppCompatActivity  {
     //Bundle extras = getIntent().getExtras();
     ArrayList activeEmployess = new ArrayList<Employee>();
-    String places_loc[][]={{"Kakkanad","1","2"},{"Vytila","5","2"},{"Thripunithura","7","4"},{"Palarivattom","6","1"}};
+    //String places_loc[][]={{"Kakkanad","1","2"},{"Vytila","5","2"},{"Thripunithura","7","4"},{"Palarivattom","6","1"}};
     String uid,tid;
     double distance,best_distance,lat1,lon1,lat2,lon2;
     int customer_loc,r_no;

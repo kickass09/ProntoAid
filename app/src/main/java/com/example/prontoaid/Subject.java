@@ -31,12 +31,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 
 public class Subject extends AppCompatActivity implements View.OnClickListener {
     Button btnDatePicker, btnTimePicker, btnsearch, btnPayNow;
     EditText txtDate, txtTime;
-    String job,loc;
+    String job,loc,uid;
     private int mYear, mMonth, mDay, mHour, mMinute;
     Intent intent ;
     int amount;
@@ -46,7 +47,9 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     RadioGroup check_pay,bookmethod;
     String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user",select_pay;
     int GOOGLE_PAY_REQUEST_CODE = 123;
+    ArrayList activeEmployess = new ArrayList<Employee>();
     DatabaseReference myRef1 = database.getReference("Jobs");
+    Map emp;
 
     public void onRadioButtonClicked(View view) {
 
@@ -228,44 +231,47 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         if (v == btnsearch){
 
             // Check for scheduler
+
             final String checkviewpending = ((RadioButton)findViewById(bookmethod.getCheckedRadioButtonId())).getText().toString();
+            /*
             if (checkviewpending.equalsIgnoreCase("View Pending Requests")){
                 Intent intent = new Intent(this, scheduler.class);
                 startActivity(intent);
             }
+            */
             select_pay= ((RadioButton)findViewById(check_pay.getCheckedRadioButtonId())).getText().toString();
             SharedPreferences sp = getSharedPreferences("logindata" , Context.MODE_PRIVATE);
             sp.edit().putString("for_loc",loc).commit();
             sp.edit().putString("for_job",job).commit();
             sp.edit().putString("for_pay",select_pay).commit();
-
-            myRef1.child(job).addListenerForSingleValueEvent(new ValueEventListener() {
+            if (checkviewpending.equalsIgnoreCase("Hire now")) {
+                myRef1.child(job).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()){
+                        if (dataSnapshot.exists()) {
                             //DatabaseReference refloc=database.getReference("UpdateLocation");
                             //refloc.setValue("1");
-                            if (select_pay.equals("Google Pay")){
+                            if (select_pay.equals("Google Pay")) {
                                 Toast.makeText(Subject.this, "Pay now", Toast.LENGTH_SHORT).show();
                                 //Toast paynow = Toast.makeText(getApplicationContext(),"Pay now-",Toast.LENGTH_SHORT);
                                 //paynow.show();
                                 switch (job) {
                                     case "Carpenter":
-                                        amount=250;
+                                        amount = 250;
                                         break;
                                     case "Plumber":
-                                        amount=300;
+                                        amount = 300;
                                         break;
                                     case "Electrician":
-                                        amount=350;
+                                        amount = 350;
                                         break;
                                     case "House Cleaner":
-                                        amount=300;
+                                        amount = 300;
                                         break;
                                     default:
                                         break;
 
-                                    }
+                                }
 
                                 Uri uri = new Uri.Builder()
                                         .scheme("upi")
@@ -275,7 +281,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                                         .appendQueryParameter("mc", "1234")
                                         .appendQueryParameter("tr", "983638Pronto")
                                         .appendQueryParameter("tn", "Service Payment")
-                                        .appendQueryParameter("am", amount+"")
+                                        .appendQueryParameter("am", amount + "")
                                         .appendQueryParameter("cu", "INR")
                                         .appendQueryParameter("url", "www.google.com")
                                         .build();
@@ -283,17 +289,14 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                                 intent.setData(uri);
                                 intent.setPackage(GOOGLE_PAY_PACKAGE_NAME);
                                 startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
-                                }
-                            else{
+                            } else {
                                 finish();
                                 intent = new Intent(Subject.this, Result.class);
                                 startActivity(intent);
                             }
-                        }
-                        else{
-                            if (!checkviewpending.equalsIgnoreCase("View Pending Requests")){
-                                Toast.makeText(Subject.this, "No available workers, try again later", Toast.LENGTH_SHORT).show();
-                            }
+                        } else {
+                            Toast.makeText(Subject.this, "No available workers, try again later", Toast.LENGTH_SHORT).show();
+
 
                         }
                     }
@@ -303,6 +306,16 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
 
                     }
                 });
+            }
+         else{
+                //Toast.makeText(Subject.this, "Hello Testing...", Toast.LENGTH_SHORT).show();
+                myRef=database.getReference("Requesting");
+
+                uid = myRef.push().getKey();
+
+                myRef.child(uid).child("Job").setValue(job);
+
+            }
 
         }
 
