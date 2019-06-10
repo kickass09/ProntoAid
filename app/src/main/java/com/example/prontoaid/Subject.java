@@ -314,7 +314,9 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                 uid = myRef.push().getKey();
 
                 myRef.child(uid).child("Job").setValue(job);
-                myRef.child(uid).child("Date").setValue(mDay+"/"+mMonth+"/"+mYear+" "+mHour+":"+mMinute);
+                myRef.child(uid).child("Date").setValue(txtDate.getText().toString());
+                myRef.child(uid).child("Time").setValue(txtTime.getText().toString());
+
 
             }
 
