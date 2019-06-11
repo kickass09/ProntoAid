@@ -142,8 +142,6 @@ public class login extends AppCompatActivity {
                                             myRef.child(postSnapshot.getKey()).child("Loc_Longitude").setValue(longitude+"");
                                             //float dist=calculateDistance(latitude,longitude,10.001944, 76.350272);
                                             //Log.i("Distance",dist+"");
-
-
                                             Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_SHORT).show();
                                             //Intent intent = new Intent(login.this, Subject.class);
                                             Intent intent = new Intent(login.this,WelcomeActivity.class);

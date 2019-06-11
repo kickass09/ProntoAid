@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -40,7 +41,7 @@ import java.util.Date;
 public class Subject extends AppCompatActivity implements View.OnClickListener {
     Button btnDatePicker, btnTimePicker, btnsearch, btnPayNow;
     EditText txtDate, txtTime;
-    String job,loc,uid;
+    String job,loc,uid,datein;
     private int mYear, mMonth, mDay, mHour, mMinute;
     Intent intent ;
     int amount;
@@ -311,13 +312,17 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                 });
             }
          else{
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
+                datein=txtDate.getText().toString()+" "+txtTime.getText().toString();
                try{
                    // https://www.mkyong.com/java/how-to-convert-string-to-date-java/
                    // first convert date to date objecct
                    // then send to validate function
                    // if true send to database
-                   Date date = null;
+                    Date date=formatter.parse(datein);
+
+                   //Date date = null;
                    if (validateData(date)){
                        //Toast.makeText(Subject.this, "Hello Testing...", Toast.LENGTH_SHORT).show();
                        myRef=database.getReference("Requesting");
@@ -336,8 +341,10 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                    // else
                }catch (Exception e){
                    // Show toast that date is wrong
+                   Toast.makeText(Subject.this, "Date is wrong", Toast.LENGTH_SHORT).show();
 
                }
+
 
 
 
@@ -374,6 +381,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         private boolean validateData(Date date) {
 
          // write the logic here to validate for example less than 2 days
+         //   if Integer.parseInt(date.)
          Boolean retval = true;
 
          return retval;
