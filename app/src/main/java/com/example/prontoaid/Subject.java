@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -51,9 +52,9 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     RadioGroup check_pay,bookmethod;
     String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user",select_pay;
     int GOOGLE_PAY_REQUEST_CODE = 123;
-    ArrayList activeEmployess = new ArrayList<Employee>();
+    //ArrayList activeEmployess = new ArrayList<Employee>();
     DatabaseReference myRef1 = database.getReference("Jobs");
-    Map emp;
+    //Map emp;
 
     public void onRadioButtonClicked(View view) {
 
@@ -171,8 +172,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         btnDatePicker = (Button) findViewById(R.id.btn_date);
         btnTimePicker = (Button) findViewById(R.id.btn_time);
         btnsearch = (Button) findViewById(R.id.search);
-        txtDate = (EditText) findViewById(R.id.in_date);
-        txtTime = (EditText) findViewById(R.id.in_time);
+        txtDate = findViewById(R.id.in_date);
+        txtTime = findViewById(R.id.in_time);
 
         btnDatePicker.setOnClickListener(this);
         btnTimePicker.setOnClickListener(this);
@@ -336,7 +337,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                        myRef.child(uid).child("Date").setValue(txtDate.getText().toString());
                        myRef.child(uid).child("Time").setValue(txtTime.getText().toString());
                    } else{
-                       //show toast
+                       Toast.makeText(Subject.this, "Date is invalid", Toast.LENGTH_SHORT).show();
                    }
                    // else
                }catch (Exception e){
@@ -381,8 +382,12 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         private boolean validateData(Date date) {
 
          // write the logic here to validate for example less than 2 days
-         //   if Integer.parseInt(date.)
-         Boolean retval = true;
+           //if date.
+            Boolean retval = false;
+            Date currentdate= new Date();
+            if (date.compareTo(currentdate)>0){
+                retval = true;
+            }
 
          return retval;
         }
