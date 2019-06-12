@@ -4,6 +4,8 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,12 +30,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 //date
@@ -43,9 +47,10 @@ import java.util.Date;
 public class Subject extends AppCompatActivity implements View.OnClickListener {
     Button btnDatePicker, btnTimePicker, btnsearch, btnPayNow;
     EditText txtDate, txtTime;
-    String job,loc,uid,datein;
+    String job,loc,uid,datein,address;
     private int mYear, mMonth, mDay, mHour, mMinute;
     Intent intent ;
+    double lat1,lon1;
     int amount;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Assigned");
@@ -55,6 +60,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     int GOOGLE_PAY_REQUEST_CODE = 123;
     //ArrayList activeEmployess = new ArrayList<Employee>();
     DatabaseReference myRef1 = database.getReference("Jobs");
+    SharedPreferences sp;
     //Map emp;
 
     public void onRadioButtonClicked(View view) {
@@ -104,7 +110,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.subject);
         check_pay = findViewById(R.id.payCheck);
         bookmethod = findViewById(R.id.bookMethod);
-        final SharedPreferences sp = getSharedPreferences("logindata" , MODE_PRIVATE);
+        sp = getSharedPreferences("logindata" , MODE_PRIVATE);
         // For reference
         // checkedbuttonid = bookmethod.getCheckedRadioButtonId();
         // scheduleforlatebutton = (RadioButton) findViewById(checkedbuttonid);
@@ -247,7 +253,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             }
             */
             select_pay= ((RadioButton)findViewById(check_pay.getCheckedRadioButtonId())).getText().toString();
-            SharedPreferences sp = getSharedPreferences("logindata" , Context.MODE_PRIVATE);
+
             sp.edit().putString("for_loc",loc).commit();
             sp.edit().putString("for_job",job).commit();
             sp.edit().putString("for_pay",select_pay).commit();
@@ -329,13 +335,15 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                    if (validateData(date)){
                        //Toast.makeText(Subject.this, "Hello Testing...", Toast.LENGTH_SHORT).show();
                        myRef=database.getReference("Requesting");
-
+                       lat1=Double.parseDouble(sp.getString("latitude","null"));
+                       lon1=Double.parseDouble(sp.getString("longitude","null"));
+                       address=getAddress(lat1,lon1);
                        uid = myRef.push().getKey();
                        Map data = new HashMap();
                        data.put("DateBook", txtDate.getText().toString());
                        data.put("TimeBook", txtTime.getText().toString());
-                       //data.put("Job",job);
-                       data.put("LocBook", "Location");
+                       data.put("Job",job);
+                       data.put("LocBook", address);
                        myRef.child(uid).setValue(data);
                        //Convert String to date object using:
 
@@ -393,6 +401,34 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
 
          return retval;
         }
+
+    public String getAddress(double lat, double lng) {
+        Geocoder geocoder = new Geocoder(Subject.this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            Address obj = addresses.get(0);
+            String add = obj.getAddressLine(0);
+            /*add = add + "\n" + obj.getCountryName();
+            add = add + "\n" + obj.getCountryCode();
+            add = add + "\n" + obj.getAdminArea();
+            add = add + "\n" + obj.getPostalCode();
+            add = add + "\n" + obj.getSubAdminArea();
+            add = add + "\n" + obj.getLocality();
+            add = add + "\n" + obj.getSubThoroughfare();*/
+
+            //Log.v("IGA", "Address" + add);
+            return add;
+            // Toast.makeText(this, "Address=>" + add,
+            // Toast.LENGTH_SHORT).show();
+
+            // TennisAppActivity.showDialog(add);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    }
 
     }
 
