@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -103,6 +104,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.subject);
         check_pay = findViewById(R.id.payCheck);
         bookmethod = findViewById(R.id.bookMethod);
+        final SharedPreferences sp = getSharedPreferences("logindata" , MODE_PRIVATE);
         // For reference
         // checkedbuttonid = bookmethod.getCheckedRadioButtonId();
         // scheduleforlatebutton = (RadioButton) findViewById(checkedbuttonid);
@@ -329,13 +331,17 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                        myRef=database.getReference("Requesting");
 
                        uid = myRef.push().getKey();
-
-                       myRef.child(uid).child("Job").setValue(job);
+                       Map data = new HashMap();
+                       data.put("DateBook", txtDate.getText().toString());
+                       data.put("TimeBook", txtTime.getText().toString());
+                       //data.put("Job",job);
+                       data.put("LocBook", "Location");
+                       myRef.child(uid).setValue(data);
                        //Convert String to date object using:
 
                        // Avaiable format
-                       myRef.child(uid).child("Date").setValue(txtDate.getText().toString());
-                       myRef.child(uid).child("Time").setValue(txtTime.getText().toString());
+                       //myRef.child(uid).child("Date").setValue(txtDate.getText().toString());
+                       //myRef.child(uid).child("Time").setValue(txtTime.getText().toString());
                    } else{
                        Toast.makeText(Subject.this, "Date is invalid", Toast.LENGTH_SHORT).show();
                    }
@@ -345,10 +351,6 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                    Toast.makeText(Subject.this, "Date is wrong", Toast.LENGTH_SHORT).show();
 
                }
-
-
-
-
 
             }
 
