@@ -15,7 +15,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,23 +26,24 @@ public class Result extends AppCompatActivity  {
     //Bundle extras = getIntent().getExtras();
     ArrayList activeEmployess = new ArrayList<Employee>();
     //String places_loc[][]={{"Kakkanad","1","2"},{"Vytila","5","2"},{"Thripunithura","7","4"},{"Palarivattom","6","1"}};
-    String uid,tid;
+    String uid,tid,vid,startdate,enddate;
     double distance,best_distance,lat1,lon1,lat2,lon2;
     int customer_loc,r_no;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef1,myRef,myRef2;
-    String loc,name,job,phone,uname,cusname,cusnum,select_pay;
+    DatabaseReference myRef1,myRef,myRef2,myRef3;
+    String loc,name,job,phone,uname,cusname,cusnum,select_pay,email;
     TextView worklist;
     Button taskover;
     int empno,amount;
     Map emp;
-    //Employee e;
-    //String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user",select_pay;
+    SimpleDateFormat formatter;
+
 
     public void task_complete(View view){
 
 
         myRef1 = database.getReference("Assigned");
+        myRef3=database.getReference("History");
         myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -48,11 +52,25 @@ public class Result extends AppCompatActivity  {
                 Employee ideal=(Employee)activeEmployess.get(empno);
                 //Log.d("Test List Username",d.getUsername());
                 Map data = new HashMap();
+                Map hist= new HashMap();
                 data.put("User", ideal.getUsername());
                 data.put("Emp_Name", ideal.getName());
                 data.put("Phone_Number", ideal.getContact());
                 data.put("Loclatitude",ideal.getLoclatitude());
                 data.put("Loclongitude",ideal.getLoclongitude());
+                hist.put("Job",job);
+                hist.put("Customer_Username",email);
+                hist.put("Worker_Username",ideal.getUsername());
+                hist.put("Customer_lat",lat1);
+                hist.put("Customer_lon",lon1);
+                hist.put("Worker_lat",((Employee) activeEmployess.get(empno)).getLoclatitude());
+                hist.put("Worker_lon",((Employee) activeEmployess.get(empno)).getLoclatitude());
+                hist.put("Start",startdate);
+                Date date=new Date();
+                enddate=formatter.format(date);
+                hist.put("End",enddate);
+                vid=myRef3.push().getKey();
+                myRef3.child(vid).setValue(hist);
 
                 myRef2.child(job).child(tid).setValue(data);
                 if (select_pay.equals("Cash on completion")) {
@@ -75,6 +93,7 @@ public class Result extends AppCompatActivity  {
                         }
                     Toast.makeText(Result.this, "Please pay Rs"+amount, Toast.LENGTH_SHORT).show();
                     }
+                hist.put("Amount",amount+"");
 
                 finish();
                 Intent intent = new Intent(Result.this, Review.class);
@@ -92,6 +111,7 @@ public class Result extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         final SharedPreferences sp = getSharedPreferences("logindata" , MODE_PRIVATE);
         taskover = findViewById(R.id.taskover);
         //double d1,d2;
@@ -100,9 +120,10 @@ public class Result extends AppCompatActivity  {
         //Log.d("Distance   Ashish ",d1+"");
         //Log.d("Distance  Nathaniel ",d2+"");
         job = sp.getString("for_job","null");
+        //customer loc
         lat1=Double.parseDouble(sp.getString("latitude","null"));
         lon1=Double.parseDouble(sp.getString("longitude","null"));
-
+        email=sp.getString("username","null");
         loc =  sp.getString("for_loc","null");
         //job = getIntent().getStringExtra("for_job");
         //loc = getIntent().getStringExtra("for_loc");
@@ -129,7 +150,7 @@ public class Result extends AppCompatActivity  {
                         activeEmployess.add(e);
 
                         }
-
+                    //worker loc
                     lat2=Double.parseDouble(((Employee) activeEmployess.get(0)).getLoclatitude());
                     lon2=Double.parseDouble(((Employee) activeEmployess.get(0)).getLoclongitude());
                     best_distance=calculateDistance(lat1,lon1,lat2,lon2);
@@ -153,7 +174,7 @@ public class Result extends AppCompatActivity  {
                             details=job+" "+name+" has been assigned to you\nContact: "+phone;
                             empno=i;
                             taskover.setVisibility(View.VISIBLE);
-
+                            //myRef3=database.getReference("History");
                             myRef1 = database.getReference("Assigned");
                             myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -167,7 +188,11 @@ public class Result extends AppCompatActivity  {
                                     data.put("Customer_Contact", cusnum);
                                     data.put("Customer_Latitude",lat1+"");
                                     data.put("Customer_Longitude",lon1+"");
+                                    Date date=new Date();
+
+                                    startdate=formatter.format(date);
                                     myRef1.child(uid).setValue(data);
+
                                     Log.d("User Worker again", uname);
                                     myRef=myRef.child(job);
                                     myRef.addListenerForSingleValueEvent(new ValueEventListener() {
