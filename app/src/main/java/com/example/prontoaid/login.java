@@ -136,6 +136,7 @@ public class login extends AppCompatActivity {
                                             sp.edit().putString("phone",phone).commit();
                                             sp.edit().putString("latitude",latitude+"").commit();
                                             sp.edit().putString("longitude",longitude+"").commit();
+                                            sp.edit().putString("username",email).commit();
                                             //Log.d("Post Key",postSnapshot.getKey());
                                             //locationListenSet();
                                             myRef.child(postSnapshot.getKey()).child("Loc_Latitude").setValue(latitude+"");

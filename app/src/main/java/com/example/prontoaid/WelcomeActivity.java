@@ -77,6 +77,8 @@ public class WelcomeActivity extends AppCompatActivity
             Intent intent = new Intent(WelcomeActivity.this,Subject.class);
             startActivity(intent);
         } else if (id == R.id.nav_history) {
+            Intent intent = new Intent(WelcomeActivity.this,History.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_settings) {
 
