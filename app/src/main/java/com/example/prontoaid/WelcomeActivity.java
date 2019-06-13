@@ -1,6 +1,7 @@
 package com.example.prontoaid;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.*;
 
 public class WelcomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,6 +62,11 @@ public class WelcomeActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+                Intent callintent = new Intent(Intent.ACTION_DIAL);
+                callintent.setData(Uri.parse("tel:7736507471"));
+                startActivity(callintent);
+
             return true;
         }
 
@@ -81,10 +88,15 @@ public class WelcomeActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_settings) {
+            Intent intent = new Intent(WelcomeActivity.this,about.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_logout) {
+            Intent intent = new Intent(WelcomeActivity.this,login.class);
+            startActivity(intent);
 
         }
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

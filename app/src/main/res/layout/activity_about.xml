@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardview_light_background"
+    tools:context=".about">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="383dp"
+        app:srcCompat="@drawable/capture" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView3"
+        android:layout_centerInParent="true"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="ProntoAid helps you find the right service professionals for activities important to you.ProntoAid aims at introducing your local electrician, plumber or even coconut tree climber into this digital world with the help of a mobile application.Our vision is to use smart processes and technology to structure the highly unorganised services marketplace in India.ProntoAid makes hiring the right service professionals a seamless experience."
+        android:textColor="@color/colorPrimary"
+        android:textColorLink="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+</RelativeLayout>
