@@ -58,6 +58,7 @@ public class Result extends AppCompatActivity  {
                 data.put("Phone_Number", ideal.getContact());
                 data.put("Loclatitude",ideal.getLoclatitude());
                 data.put("Loclongitude",ideal.getLoclongitude());
+
                 hist.put("Job",job);
                 hist.put("Customer_Username",email);
                 hist.put("Worker_Username",ideal.getUsername());
@@ -69,6 +70,7 @@ public class Result extends AppCompatActivity  {
                 Date date=new Date();
                 enddate=formatter.format(date);
                 hist.put("End",enddate);
+                hist.put("Amount",amount+"");
                 vid=myRef3.push().getKey();
                 myRef3.child(vid).setValue(hist);
 
