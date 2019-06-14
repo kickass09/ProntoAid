@@ -48,7 +48,7 @@
         android:layout_centerInParent="true"
         android:layout_below="@+id/textView13"
         android:layout_marginTop="100dp"
-        android:paddingLeft="30dp"
+        android:paddingLeft="50dp"
         android:orientation="horizontal">
 
 

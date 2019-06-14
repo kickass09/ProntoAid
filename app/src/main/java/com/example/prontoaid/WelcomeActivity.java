@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -66,7 +67,7 @@ public class WelcomeActivity extends AppCompatActivity
 
         dotscount = viewPagerAdapter.getCount();
         dots = new ImageView[dotscount];
-
+        Log.d("DotValue",dotscount+"");
         for(int i = 0; i < dotscount; i++){
 
             dots[i] = new ImageView(this);

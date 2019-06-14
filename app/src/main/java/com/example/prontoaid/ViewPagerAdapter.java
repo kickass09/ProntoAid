@@ -17,7 +17,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private Integer [] images = {R.drawable.slide1,R.drawable.slide2,R.drawable.slide3};
+    private Integer [] images = {R.drawable.slide1,R.drawable.slide2,R.drawable.slide3,R.drawable.slide4};
 
     public ViewPagerAdapter(Context context) {
         this.context = context;
@@ -46,11 +46,13 @@ public class ViewPagerAdapter extends PagerAdapter {
             public void onClick(View v) {
 
                 if(position == 0){
-                    Toast.makeText(context, "its a carpenter", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Carpenter", Toast.LENGTH_SHORT).show();
                 } else if(position == 1){
-                    Toast.makeText(context, "its a plumber", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Plumber", Toast.LENGTH_SHORT).show();
+                } else if(position == 2){
+                    Toast.makeText(context, "Electrician", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "its an electrician", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "House Cleaner", Toast.LENGTH_SHORT).show();
                 }
 
             }
