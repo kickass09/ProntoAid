@@ -254,6 +254,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             // Check for scheduler
 
             final String checkviewpending = ((RadioButton)findViewById(bookmethod.getCheckedRadioButtonId())).getText().toString();
+            //sp.edit().putString("paymode",checkviewpending);
             /*
             if (checkviewpending.equalsIgnoreCase("View Pending Requests")){
                 Intent intent = new Intent(this, scheduler.class);

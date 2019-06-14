@@ -1,5 +1,6 @@
 package com.example.prontoaid;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +30,7 @@ public class Notifications extends AppCompatActivity {
     DatabaseReference myref;
     String uname,stringnoty,job,name,phone,date,time;
     Date daterequest,datecurrent,timerequest,timecurrent,reqdate;
-    String datescurrent,timescurrent;
+    String datescurrent,timescurrent,uid;
     SharedPreferences sp;
     SimpleDateFormat sdf,stf;
     Button finish;
@@ -57,6 +58,8 @@ public class Notifications extends AppCompatActivity {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                     Map noty=(Map)postSnapshot.getValue();
                     if ((noty.get("CustomerUser").toString()).equals(uname)){
+                        uid=postSnapshot.getKey();
+                        Log.d("uid vak",uid);
                         job=noty.get("Job").toString();
                         name=noty.get("WorkerName").toString();
                         phone=noty.get("WorkerContact").toString();
@@ -160,6 +163,15 @@ public class Notifications extends AppCompatActivity {
         });
 
 
+
+    }
+
+    public void goHome(View view){
+
+        myref.child(uid).removeValue();
+        finish();
+        Intent intent = new Intent(Notifications.this,WelcomeActivity.class);
+        startActivity(intent);
 
     }
 }

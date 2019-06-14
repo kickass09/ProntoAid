@@ -25,7 +25,7 @@ import java.util.Map;
 public class Result extends AppCompatActivity  {
     //Bundle extras = getIntent().getExtras();
     ArrayList activeEmployess = new ArrayList<Employee>();
-    String uid,tid,vid,startdate,enddate,review;
+    String uid,tid,vid,startdate,enddate;
     double distance,lat1,lon1,lat2,lon2,weight,normaldistance,rating,normalrating,bestweight;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef1,myRef,myRef2,myRef3;
@@ -66,6 +66,7 @@ public class Result extends AppCompatActivity  {
                 hist.put("Worker_lat",((Employee) activeEmployess.get(empno)).getLoclatitude());
                 hist.put("Worker_lon",((Employee) activeEmployess.get(empno)).getLoclatitude());
                 hist.put("Start",startdate);
+                hist.put("PaymentMode",select_pay);
                 Date date=new Date();
                 enddate=formatter.format(date);
                 hist.put("End",enddate);
@@ -115,7 +116,7 @@ public class Result extends AppCompatActivity  {
         formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         final SharedPreferences sp = getSharedPreferences("logindata" , MODE_PRIVATE);
         taskover = findViewById(R.id.taskover);
-
+        //paymode=sp.getString("paymode","null");
         job = sp.getString("for_job","null");
         //customer loc
         lat1=Double.parseDouble(sp.getString("latitude","null"));
