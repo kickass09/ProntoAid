@@ -75,6 +75,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                 Button btn_time = this.findViewById(R.id.btn_time);
                 TextView in_date = this.findViewById(R.id.in_date);
                 TextView in_time = this.findViewById(R.id.in_time);
+                TextView in_amount = this.findViewById(R.id.in_amount);
                 if (checked) {
                     btnsearch.setText("Book Now");
                     btn_date.setVisibility(View.GONE);
@@ -84,6 +85,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                     in_date.setVisibility(View.GONE);
 
                     in_time.setVisibility(View.GONE);
+
+                    in_amount.setVisibility(View.GONE);
                     break;
                 }
             case R.id.radioButton2:
@@ -98,6 +101,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                     in_date1.setVisibility(View.VISIBLE);
                     TextView in_time1 = (TextView) this.findViewById(R.id.in_time);
                     in_time1.setVisibility(View.VISIBLE);
+                    TextView in_amount1 = (TextView) this.findViewById(R.id.in_amount);
+                    in_amount1.setVisibility(View.VISIBLE);
                     break;
 
                 }
