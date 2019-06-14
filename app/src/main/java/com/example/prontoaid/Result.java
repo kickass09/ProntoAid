@@ -28,7 +28,6 @@ public class Result extends AppCompatActivity  {
     //String places_loc[][]={{"Kakkanad","1","2"},{"Vytila","5","2"},{"Thripunithura","7","4"},{"Palarivattom","6","1"}};
     String uid,tid,vid,startdate,enddate;
     double distance,best_distance,lat1,lon1,lat2,lon2;
-    int customer_loc,r_no;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef1,myRef,myRef2,myRef3;
     String loc,name,job,phone,uname,cusname,cusnum,select_pay,email;

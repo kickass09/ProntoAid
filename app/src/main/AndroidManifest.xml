@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".about"></activity>
+        <activity android:name=".Notifications"></activity>
+        <activity android:name=".about" />
         <activity android:name=".History" />
         <activity
             android:name=".WelcomeActivity"
