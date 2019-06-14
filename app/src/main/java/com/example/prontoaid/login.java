@@ -132,6 +132,7 @@ public class login extends AppCompatActivity {
                                             //myRef.child(n+"").child("Available").onDisconnect().setValue("Disconnected");
 
                                             SharedPreferences sp = getSharedPreferences("logindata" , Context.MODE_PRIVATE);
+
                                             sp.edit().putString("name",name).commit();
                                             sp.edit().putString("phone",phone).commit();
                                             sp.edit().putString("latitude",latitude+"").commit();

@@ -189,10 +189,13 @@ public class WelcomeActivity extends AppCompatActivity
             Intent intent = new Intent(WelcomeActivity.this,about.class);
             startActivity(intent);
 
+        }else if(id==R.id.nav_notifications){
+            Intent intent = new Intent(WelcomeActivity.this,Notifications.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(WelcomeActivity.this,login.class);
             startActivity(intent);
-
         }
 
 

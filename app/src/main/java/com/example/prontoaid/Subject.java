@@ -45,9 +45,9 @@ import java.util.Date;
 
 
 public class Subject extends AppCompatActivity implements View.OnClickListener {
-    Button btnDatePicker, btnTimePicker, btnsearch, btnPayNow;
+    Button btnDatePicker, btnTimePicker, btnsearch;
     EditText txtDate, txtTime;
-    String job,loc,uid,datein,address;
+    String job,loc,uid,datein,address,email,phone,name;
     private int mYear, mMonth, mDay, mHour, mMinute;
     Intent intent ;
     double lat1,lon1;
@@ -111,6 +111,9 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
         check_pay = findViewById(R.id.payCheck);
         bookmethod = findViewById(R.id.bookMethod);
         sp = getSharedPreferences("logindata" , MODE_PRIVATE);
+        name=sp.getString("name","null");
+        phone=sp.getString("phone","null");
+        email=sp.getString("username","null");
         // For reference
         // checkedbuttonid = bookmethod.getCheckedRadioButtonId();
         // scheduleforlatebutton = (RadioButton) findViewById(checkedbuttonid);
@@ -344,7 +347,12 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                        data.put("TimeBook", txtTime.getText().toString());
                        data.put("Job",job);
                        data.put("LocBook", address);
+                       data.put("CustomerUser",email);
                        myRef.child(uid).setValue(data);
+                       Toast.makeText(Subject.this, "Your request is being processed...", Toast.LENGTH_SHORT).show();
+                       finish();
+                       Intent intent = new Intent(Subject.this,WelcomeActivity.class);
+                       startActivity(intent);
                        //Convert String to date object using:
 
                        // Avaiable format
@@ -386,7 +394,6 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             Intent intent = new Intent(Subject.this, Result.class);
             startActivity(intent);
             }
-
         }
 
         private boolean validateData(Date date) {
