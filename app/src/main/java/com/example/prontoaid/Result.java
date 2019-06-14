@@ -69,9 +69,7 @@ public class Result extends AppCompatActivity  {
                 Date date=new Date();
                 enddate=formatter.format(date);
                 hist.put("End",enddate);
-                hist.put("Amount",amount+"");
-                vid=myRef3.push().getKey();
-                myRef3.child(vid).setValue(hist);
+
 
                 myRef2.child(job).child(tid).setValue(data);
                 if (select_pay.equals("Cash on completion")) {
@@ -95,6 +93,8 @@ public class Result extends AppCompatActivity  {
                     Toast.makeText(Result.this, "Please pay Rs"+amount, Toast.LENGTH_SHORT).show();
                     }
                 hist.put("Amount",amount+"");
+                vid=myRef3.push().getKey();
+                myRef3.child(vid).setValue(hist);
 
                 finish();
                 Intent intent = new Intent(Result.this, Review.class);
