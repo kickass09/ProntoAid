@@ -333,8 +333,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             }
          else{
                 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-                amount=Integer.parseInt(in_amnt.getText().toString());
-                sp.edit().putString("Schedule_Amount",amount+"").commit();
+
                 datein=txtDate.getText().toString()+" "+txtTime.getText().toString();
                try{
                    // https://www.mkyong.com/java/how-to-convert-string-to-date-java/
@@ -359,9 +358,14 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                        data.put("CustomerUser",email);
                        myRef.child(uid).setValue(data);
                        Toast.makeText(Subject.this, "Your request is being processed...", Toast.LENGTH_SHORT).show();
-                       finish();
-                       Intent intent = new Intent(Subject.this,WelcomeActivity.class);
-                       startActivity(intent);
+
+                           amount = Integer.parseInt(in_amnt.getText().toString());
+                           sp.edit().putString("Schedule_Amount", amount + "").commit();
+                           finish();
+                           Intent intent = new Intent(Subject.this, WelcomeActivity.class);
+                           startActivity(intent);
+
+
                        //Convert String to date object using:
 
                        // Avaiable format
@@ -395,8 +399,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         String status=data.getStringExtra("Status");
-        Log.d("Result Code of payment:",Integer.toString(requestCode));
-        Log.d("Google Code of payment:",Integer.toString(GOOGLE_PAY_REQUEST_CODE));
+        //Log.d("Result Code of payment:",Integer.toString(requestCode));
+        //Log.d("Google Code of payment:",Integer.toString(GOOGLE_PAY_REQUEST_CODE));
         Toast.makeText(Subject.this, status, Toast.LENGTH_SHORT).show();
         if (status.equals("SUCCESS")){
             finish();

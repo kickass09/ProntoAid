@@ -16,7 +16,6 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".Notifications"></activity>
         <activity android:name=".about" />
-        <activity android:name=".History" />
         <activity
             android:name=".WelcomeActivity"
             android:label="@string/title_activity_welcome"

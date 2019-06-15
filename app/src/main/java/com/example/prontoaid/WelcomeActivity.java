@@ -180,12 +180,8 @@ public class WelcomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             // Handle the camera action
-            Intent intent = new Intent(WelcomeActivity.this,Subject.class);
+            Intent intent = new Intent(WelcomeActivity.this, Subject.class);
             startActivity(intent);
-        } else if (id == R.id.nav_history) {
-            Intent intent = new Intent(WelcomeActivity.this,History.class);
-            startActivity(intent);
-
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(WelcomeActivity.this,about.class);
             startActivity(intent);
