@@ -172,7 +172,7 @@ public class Result extends AppCompatActivity  {
                             rating=Double.parseDouble(((Employee) activeEmployess.get(i)).getRating());
                             normalrating=2*rating;
                             weight=0.6*normaldistance+0.4*normalrating;
-                            if (bestweight >= weight) {
+                            if (bestweight <= weight) {
                                 //Log.d("Assigning","3");
                                 bestweight=weight;
                                 uname = ((Employee) activeEmployess.get(i)).getUsername();
