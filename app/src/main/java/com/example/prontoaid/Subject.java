@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -50,6 +52,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     String job,loc,uid,datein,address,email,phone,name;
     private int mYear, mMonth, mDay, mHour, mMinute;
     Intent intent ;
+    EditText amt;
     double lat1,lon1;
     int amount;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -88,6 +91,10 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                     in_time.setVisibility(View.GONE);
 
                     in_amount.setVisibility(View.GONE);
+                    RadioButton myRadioButton = (RadioButton) findViewById(R.id.radioGoogle);
+                    myRadioButton.setVisibility(View.VISIBLE);
+                    ImageView imgView = (ImageView)findViewById(R.id.imageView4);
+                    imgView .setVisibility(View.VISIBLE);
                     break;
                 }
             case R.id.radioButton2:
@@ -104,6 +111,10 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                     in_time1.setVisibility(View.VISIBLE);
                     TextView in_amount1 = (TextView) this.findViewById(R.id.in_amount);
                     in_amount1.setVisibility(View.VISIBLE);
+                    RadioButton myRadioButton = (RadioButton) findViewById(R.id.radioGoogle);
+                    myRadioButton.setVisibility(View.GONE);
+                    ImageView imgView = (ImageView)findViewById(R.id.imageView4);
+                    imgView .setVisibility(View.GONE);
                     break;
 
                 }
@@ -225,7 +236,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                     }, mYear, mMonth, mDay);
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
             long now = System.currentTimeMillis() - 1000;
-            datePickerDialog.getDatePicker().setMinDate(now);
+
+            datePickerDialog.getDatePicker().setMinDate(now + 86400000);
             datePickerDialog.getDatePicker().setMaxDate(now + (1000 * 60 * 60 * 24 * 3));
 
             datePickerDialog.show();
@@ -359,11 +371,19 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                        myRef.child(uid).setValue(data);
                        Toast.makeText(Subject.this, "Your request is being processed...", Toast.LENGTH_SHORT).show();
 
-                           amount = Integer.parseInt(in_amnt.getText().toString());
+
+
+                       final String in_amount=in_amnt.getText().toString().trim();
+                       if(TextUtils.isEmpty(in_amount)){
+                           Toast.makeText(getApplicationContext(), "Please provide an amount", Toast.LENGTH_SHORT).show();
+                       }
+                       else {
+                           amount = Integer.parseInt(in_amount);
                            sp.edit().putString("Schedule_Amount", amount + "").commit();
                            finish();
                            Intent intent = new Intent(Subject.this, WelcomeActivity.class);
                            startActivity(intent);
+                       }
 
 
                        //Convert String to date object using:
@@ -374,7 +394,9 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
                    } else{
                        Toast.makeText(Subject.this, "Date is invalid", Toast.LENGTH_SHORT).show();
                    }
-                   // else
+
+                   //amt = (EditText)findViewById(R.id.in_amount);
+                     // else
                }catch (Exception e){
                    // Show toast that date is wrong
                    Toast.makeText(Subject.this, "Date is wrong", Toast.LENGTH_SHORT).show();

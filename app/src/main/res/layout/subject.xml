@@ -356,7 +356,7 @@
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="Type Amount"
-        android:inputType="number"
+        android:inputType="number" android:min="250"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
