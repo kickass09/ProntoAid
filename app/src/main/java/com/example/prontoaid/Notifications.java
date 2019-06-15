@@ -30,7 +30,7 @@ public class Notifications extends AppCompatActivity {
     DatabaseReference myref;
     String uname,stringnoty,job,name,phone,date,time;
     Date daterequest,datecurrent,timerequest,timecurrent,reqdate;
-    String datescurrent,timescurrent,uid;
+    String datescurrent,timescurrent,uid,amount;
     SharedPreferences sp;
     SimpleDateFormat sdf,stf;
     Button finish;
@@ -42,6 +42,7 @@ public class Notifications extends AppCompatActivity {
         sdf=new SimpleDateFormat("dd-MM-yyyy");
         stf=new SimpleDateFormat("HH:mm");
         sp=getSharedPreferences("logindata",MODE_PRIVATE);
+        amount=sp.getString("Schedule_Amount","null");
         //job=sp.getString("Job","null");
         //name=sp.getString("")
         //get codes here
@@ -133,6 +134,14 @@ public class Notifications extends AppCompatActivity {
                                 flag=1;
 
                             }
+                            else{
+                                finish.setVisibility(View.GONE);
+                                stringnoty=job+" "+name+" has been assigned to you on "+date+" at "+time+"\nContact: "+phone;
+                                Log.d("StringYes",stringnoty);
+                                absent.setText("");
+                                present.setText(stringnoty);
+                                flag=1;
+                            }
 
                         }
 
@@ -167,7 +176,7 @@ public class Notifications extends AppCompatActivity {
     }
 
     public void goHome(View view){
-
+        Toast.makeText(Notifications.this, "Please pay Rs"+amount, Toast.LENGTH_SHORT).show();
         myref.child(uid).removeValue();
         finish();
         Intent intent = new Intent(Notifications.this,WelcomeActivity.class);

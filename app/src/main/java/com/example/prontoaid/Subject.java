@@ -61,6 +61,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     //ArrayList activeEmployess = new ArrayList<Employee>();
     DatabaseReference myRef1 = database.getReference("Jobs");
     SharedPreferences sp;
+    TextView in_amnt;
     //Map emp;
 
     public void onRadioButtonClicked(View view) {
@@ -113,6 +114,7 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subject);
+        in_amnt=findViewById(R.id.in_amount);
         check_pay = findViewById(R.id.payCheck);
         bookmethod = findViewById(R.id.bookMethod);
         sp = getSharedPreferences("logindata" , MODE_PRIVATE);
@@ -331,7 +333,8 @@ public class Subject extends AppCompatActivity implements View.OnClickListener {
             }
          else{
                 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-
+                amount=Integer.parseInt(in_amnt.getText().toString());
+                sp.edit().putString("Schedule_Amount",amount+"").commit();
                 datein=txtDate.getText().toString()+" "+txtTime.getText().toString();
                try{
                    // https://www.mkyong.com/java/how-to-convert-string-to-date-java/
